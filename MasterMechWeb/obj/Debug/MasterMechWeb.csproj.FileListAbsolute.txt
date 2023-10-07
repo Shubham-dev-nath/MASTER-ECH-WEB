@@ -1,0 +1,249 @@
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.dll.config
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.pdb
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.exe
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.exe.config
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.rsp
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.exe
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.exe.config
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.rsp
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CSharp.Core.targets
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Managed.Core.targets
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.VisualBasic.Core.targets
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Win32.Primitives.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.AppContext.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Collections.Immutable.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Console.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.StackTrace.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Globalization.Calendars.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.Compression.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.Compression.ZipFile.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.FileSystem.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.FileSystem.Primitives.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Net.Http.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Net.Sockets.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Reflection.Metadata.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Encoding.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Primitives.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Text.Encoding.CodePages.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Threading.Tasks.Extensions.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.ValueTuple.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.ReaderWriter.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XmlDocument.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XPath.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XPath.XDocument.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.exe
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.exe.config
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.rsp
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\VBCSCompiler.exe
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\roslyn\VBCSCompiler.exe.config
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\Antlr3.Runtime.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.Web.Infrastructure.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\Newtonsoft.Json.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Helpers.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Mvc.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Optimization.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Razor.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Deployment.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Razor.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\WebGrease.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Helpers.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Mvc.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Optimization.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Razor.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Deployment.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Razor.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\Newtonsoft.Json.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\Antlr3.Runtime.pdb
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.AssemblyReference.cache
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.CoreCompileInputs.cache
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.CopyComplete
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.pdb
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\MasterMechLib.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\MasterMechLib.pdb
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Diagnostics.DiagnosticSource.dll
+E:\C# TRAINING\MASTER MECH WEB\MasterMechWeb\bin\System.Diagnostics.DiagnosticSource.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.dll.config
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.pdb
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.exe
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.exe.config
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.rsp
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.exe
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.exe.config
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.rsp
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CSharp.Core.targets
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Managed.Core.targets
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.VisualBasic.Core.targets
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Win32.Primitives.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.AppContext.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Collections.Immutable.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Console.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.StackTrace.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Globalization.Calendars.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.Compression.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.Compression.ZipFile.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.FileSystem.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.FileSystem.Primitives.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Net.Http.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Net.Sockets.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Reflection.Metadata.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Encoding.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Primitives.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Text.Encoding.CodePages.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Threading.Tasks.Extensions.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.ValueTuple.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.ReaderWriter.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XmlDocument.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XPath.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XPath.XDocument.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.exe
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.exe.config
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.rsp
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\VBCSCompiler.exe
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\VBCSCompiler.exe.config
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Antlr3.Runtime.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechLib.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.Web.Infrastructure.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Newtonsoft.Json.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Diagnostics.DiagnosticSource.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Helpers.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Mvc.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Optimization.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Razor.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Deployment.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Razor.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\WebGrease.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechLib.pdb
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Diagnostics.DiagnosticSource.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Helpers.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Mvc.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Optimization.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Razor.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Deployment.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Razor.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Newtonsoft.Json.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Antlr3.Runtime.pdb
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.AssemblyReference.cache
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.CoreCompileInputs.cache
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.CopyComplete
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.dll
+G:\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.pdb
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.dll.config
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechWeb.pdb
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.exe
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.exe.config
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csc.rsp
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.exe
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.exe.config
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\csi.rsp
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\Microsoft.Win32.Primitives.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.AppContext.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Collections.Immutable.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Console.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Globalization.Calendars.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.Compression.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.Compression.ZipFile.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.FileSystem.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Net.Http.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Net.Sockets.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Reflection.Metadata.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Threading.Tasks.Extensions.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.ValueTuple.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XPath.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.exe
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.exe.config
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\vbc.rsp
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\VBCSCompiler.exe
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\roslyn\VBCSCompiler.exe.config
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Antlr3.Runtime.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechLib.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.Web.Infrastructure.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Newtonsoft.Json.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Diagnostics.DiagnosticSource.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Helpers.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Mvc.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Optimization.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Razor.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Deployment.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Razor.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\WebGrease.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\MasterMechLib.pdb
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Diagnostics.DiagnosticSource.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Helpers.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Mvc.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Optimization.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.Razor.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Deployment.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\System.Web.WebPages.Razor.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Newtonsoft.Json.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Antlr3.Runtime.pdb
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.AssemblyReference.cache
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.CoreCompileInputs.cache
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.csproj.CopyComplete
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.dll
+D:\Napa Soft Project\Complete BackUp of .Net\MASTER MECH WEB\MasterMechWeb\obj\Debug\MasterMechWeb.pdb

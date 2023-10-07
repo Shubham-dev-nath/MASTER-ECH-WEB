@@ -1,0 +1,205 @@
+﻿@model IEnumerable<MasterMechLib.Invoice>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageMain.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.mnInvoiceSNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mdInvoiceDate)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.msInvoiceSts)
+        </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.mnCustNo)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.msCustFName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustLName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustMobNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustSts)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustType)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.msCustCity)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.msCustState)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.msCustPinCode)
+        </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.msCustGSTNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msVehicleRegNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msVehicleModel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msChassisNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msEngineNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msServiceType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msServiceAssoName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msServiceAssoMobNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnTotalSGST)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnTotalCGST)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnTotalIGST)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.mnTotalTax)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnTotalAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnGrandTotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnDiscountAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mcDeleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnInvoiceTotal)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnInvoiceSNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mdInvoiceDate)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.msInvoiceSts)
+        </td>*@
+        @*<td>
+            @Html.DisplayFor(modelItem => item.mnCustNo)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustFName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustLName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustMobNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustSts)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustType)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.msCustCity)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustState)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.msCustPinCode)
+        </td>*@
+        @*<td>
+            @Html.DisplayFor(modelItem => item.msCustGSTNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msVehicleRegNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msVehicleModel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msChassisNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msEngineNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msServiceType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msServiceAssoName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msServiceAssoMobNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnTotalSGST)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnTotalCGST)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnTotalIGST)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.mnTotalTax)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnTotalAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnGrandTotal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnDiscountAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnInvoiceTotal)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.mnInvoiceSNo}) |
+            @Html.ActionLink("Details", "Details", new {  id=item.mnInvoiceSNo }) |
+            @Html.ActionLink("Delete", "Delete", new {  id=item.mnInvoiceSNo }) 
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterMechWeb", "MasterMechWeb.csproj", "{8E9E29E7-049D-4EF9-88AB-53FFE17C62FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterMechLib", "..\..\MASTER MECH\MasterMech\MasterMechLib\MasterMechLib.csproj", "{9CEDB969-06E2-44B6-9E36-77B5F409CF12}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E9E29E7-049D-4EF9-88AB-53FFE17C62FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E9E29E7-049D-4EF9-88AB-53FFE17C62FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E9E29E7-049D-4EF9-88AB-53FFE17C62FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E9E29E7-049D-4EF9-88AB-53FFE17C62FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CEDB969-06E2-44B6-9E36-77B5F409CF12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CEDB969-06E2-44B6-9E36-77B5F409CF12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CEDB969-06E2-44B6-9E36-77B5F409CF12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CEDB969-06E2-44B6-9E36-77B5F409CF12}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B934DC8D-137D-4163-B392-CE6F8C8554CD}
+	EndGlobalSection
+EndGlobal

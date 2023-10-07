@@ -1,0 +1,136 @@
+﻿@model MasterMechLib.UserDtl
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageMain.cshtml";
+}
+
+<script type="text/javascript">
+    function ValidateUserID()
+    {
+        $.ajax(
+            {
+                url: '@Url.Action("ValidUser","User")',
+                dataType: "json",
+                data: {
+                    //Passing Input parameter
+                    isUserID: $('#msUserID').val()
+                },
+                success: function (responce) {
+                    if (responce.msValidUser == 'Y') {
+                        lsText = "User already exists";
+                    }
+                    else {
+                        lsText = "User does not exists";
+                    }
+                    $("#ErrorMessage").html(lsText);
+                    return false;
+                },
+                error: function () {
+                    alert(responce);
+                    return false;
+                }
+            }
+        );
+    }
+</script>
+
+
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>User</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-offset-2 input-group col-md-10">
+            <div id="ErrorMessage" class="text-danger"></div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.msUserID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.msUserID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.msUserID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+        <div>
+            <br>
+            <input type="button" value="Search"  onclick="ValidateUserID();"/>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.msPwd, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msPwd, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msPwd, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.msUserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msUserName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msUserName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.msMobNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msMobNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msMobNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.msEmailID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msEmailID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msEmailID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.msUserType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="input-group col-md-10">
+                @Html.DropDownListFor(model => model.msUserType, (SelectList)ViewBag.UserType, "Select Type", new { @class = "form-control", @width=40 })
+                @Html.ValidationMessageFor(model => model.msUserType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.msRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msRemarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.msCreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msCreatedBy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msCreatedBy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <br>
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

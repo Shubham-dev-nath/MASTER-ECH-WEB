@@ -1,0 +1,43 @@
+﻿@model MasterMechLib.UserDtl
+@{
+    ViewBag.Title = "DashBoard";
+    Layout = "~/Views/Shared/_LayoutPageMain.cshtml";
+}
+
+<h2>DashBoard</h2>
+
+<h3>Hi Masood</h3>
+
+
+@*@{
+    ViewBag.Title = "Login";
+}*@
+
+<h2>Login</h2>
+
+@*@using (Html.BeginForm("Login", "Account", FormMethod.Post))*@
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.msUserID, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBox("Username", null, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.msUserID, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.msPwd, htmlAttributes: new { @class = "control-label" })
+        @Html.Password("Password", null, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.msPwd, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <br>
+        <input type="submit" value="Login" class="btn btn-secondary" />
+    </div>
+
+    @*@if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }*@

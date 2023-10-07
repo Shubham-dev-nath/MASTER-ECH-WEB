@@ -1,0 +1,164 @@
+﻿@model IEnumerable<MasterMechLib.ItemClass>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageMain.cshtml";
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            $("#txtSearchDesc").val("@ViewBag.SearchDesc");
+            $("#txtSearchDesc").focus();
+        });
+
+    </script>
+}
+
+<script type="text/javascript">
+
+    function ResetSearch()
+    {
+        window.location = "/Item/Index";
+    }
+    function ApplySearch()
+    {
+        if ($("#txtSearchDesc").val() == "")
+        {
+            ResetSearch();
+        }
+        else
+        {
+            var lsURL = '@Url.Action("SearchItemData", "Item", new { isItemDesc = "lsDesc"})';
+            lsURL = lsURL.replace("lsDesc", encodeURIComponent($("#txtSearchDesc").val()));
+            lsURL = lsURL.replace(/&amp;/g, "&");
+            window.location = lsURL;
+        }
+    }
+</script>
+
+
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+</p>
+<div class="table-responsive">
+    <table class="table table-sm">
+        <tr>
+            <td class="col-md-6"></td>
+            <td class="text-right align-self-center">Description</td>
+            <td class="text-right"><input type="text" class="form-control" id="txtSearchDesc";" /></td>
+            <td>
+                <input type="button" value="Search" id="btnApplyFilter" class="btn btn-primary btn-large" onclick="ApplySearch();" />
+            </td>
+            <td class="col-md-2"><input type="button" value="Reset Search" id="btnResetSearch" class="btn btn-info btn-large" onclick="ResetSearch();" /></td>
+        </tr>
+    </table>
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.mnItemNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemDesc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemCatg)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnItemPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnCGSTRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnSGSTRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnIGSTRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnQtyHand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnReOrderLvl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnReorderQty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnNoOfParts)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemRemarks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCreatedBy)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnItemNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msItemDesc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msItemType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msItemCatg)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnItemPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnCGSTRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnSGSTRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnIGSTRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnQtyHand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnReOrderLvl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnReorderQty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnNoOfParts)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msItemRemarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCreatedBy)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.mnItemNo }) |
+                @Html.ActionLink("Details", "Details", new { id = item.mnItemNo }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.mnItemNo })
+                @Html.ActionLink("Select", "Select",new { id = item.mnItemNo })
+            </td>
+        </tr>
+    }
+
+</table>

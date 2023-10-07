@@ -1,0 +1,1298 @@
+﻿@using MasterMechLib
+@model Invoice
+
+@{
+    Invoice lObjInv = new Invoice();
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutPageMain.cshtml";
+    int Total = 0;
+    //int? InnValu = lObjInv.mnInvoiceSNo;
+    //string Innv = "MM/INV/2023-24/";
+    //string Innvce = Innv+ Session["Innvoice"];
+
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        function OpenInvoice(evt, InvoiceName) {
+            var i, tabcontent, tablinks;
+            var CustState = $("#msCustState").val();
+
+            tabcontent = document.getElementsByClassName("tabContent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(InvoiceName).style.display = "block";
+            evt.currentTarget.className += " active";
+
+            if (InvoiceName == "Bill") {
+                var lnPartsTotal = 0, lnPartsCGST = 0, lnPartsSGST = 0, lnPartsIGST = 0;
+                var lnLabourTotal = 0, lnLabourCGST = 0, lnLabourSGST = 0, lnLabourIGST = 0;
+                var lnTtlNetAmt = 0, lnTtlCgst = 0, lnTtlSgst = 0, lnTtlIgst = 0, totalAmt = 0;
+                var lnTtlDscAmt = 0, lnTtlTax = 0, lnTtlGrand = 0;
+
+                for (var i = 0; i <@Total; i++) {
+                    var lnLine = "#lObjInvoiceList_" + i.toString() + "__";
+
+                    if ($(lnLine + "ItemType").val() == "PARTS") {
+                        lnPartsTotal = lnPartsTotal + Number($(lnLine + "ItemPrice").val()) * ($(lnLine + "Qty").val());
+                        if ($("#msCustState").val() == "Jharkhand") {
+                            lnPartsCGST = lnPartsCGST + Number($(lnLine + "CGSTAmount").val());
+                            lnPartsSGST = lnPartsSGST + Number($(lnLine + "SGSTAmount").val());
+                        }
+                        else {
+                            lnPartsIGST = lnPartsIGST + Number($(lnLine + "IGSTAmount").val());
+                        }
+                    }
+                    if ($(lnLine + "ItemType").val() == "LABOUR") {
+                        lnLabourTotal = lnLabourTotal + ($(lnLine + "ItemPrice").val()) * ($(lnLine + "Qty").val());
+                        if ($("#msCustState").val() == "Jharkhand") {
+                            lnLabourCGST = lnLabourCGST + Number($(lnLine + "CGSTAmount").val());
+                            lnLabourSGST = lnLabourSGST + Number($(lnLine + "SGSTAmount").val());
+                        }
+                        else {
+                            lnLabourIGST = lnLabourIGST + Number($(lnLine + "IGSTAmount").val());
+                        }
+                    }
+                    lnTtlDscAmt = lnTtlDscAmt + Number($(lnLine + "DiscountAmount").val());
+                    totalAmt = lnPartsTotal + lnLabourTotal;
+                    var Totaltax = Number(lnPartsCGST + lnPartsIGST + lnLabourSGST + lnPartsSGST + lnLabourIGST + lnLabourCGST);
+                    var grandtotal = totalAmt - lnTtlDscAmt;
+                    var InvcTtl = grandtotal + Totaltax;
+                    var TtlSGST = lnPartsSGST + lnLabourSGST;
+                    var TtlCGST = lnLabourCGST + lnPartsCGST;
+                    var TtlIGST = lnLabourIGST + lnPartsIGST;
+
+                    $("#mnPartsTotal").val(String(lnPartsTotal));
+                    $("#mnLabourTotal").val(String(lnLabourTotal));
+                    $("#mnPartsCGSTTotlal").val(String(lnPartsCGST));
+                    $("#mnLabourCGSTTotal").val(String(lnLabourCGST));
+                    $("#mnPartsSGSTTotal").val(String(lnPartsSGST));
+                    $("#mnLabourSGSTTotal").val(String(lnLabourSGST));
+                    $("#mnPartsIGSTTotal").val(String(lnPartsIGST));
+                    $("#mnLabourIGSTTotal").val(String(lnLabourIGST));
+                    $("#mnTotalSGST").val(String(TtlSGST));
+                    $("#mnTotalAmount").val(String(totalAmt));
+                    $("#mnTotalCGST").val(String(TtlCGST));
+                    $("#mnTotalIGST").val(String(TtlIGST));
+                    $("#mnTotalTax").val(String(Totaltax));
+                    $("#mnGrandTotal").val(String(grandtotal));
+                    $("#mnDiscountAmount").val(String(lnTtlDscAmt));
+                    $("#mnInvoiceTotal").val(String(InvcTtl));
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $("#Del").hide();
+            $("#Add").val("AddLine");
+        });
+
+        function CustData() {
+            var lsUrl = '@Url.Action("FilterCustomers", "Invoice")';
+            var lsCustNo = $("#MnoSearch").val();
+            $.ajax(
+                {
+                    url: lsUrl,
+                    dataType: "json",
+                    data: {
+                        //Passing Input parameter
+                        searchMobileNo: lsCustNo
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        var DataOfModel;
+                        if (response.length > 0) {
+                            for (var i = 0; i < response.length; i++) {
+                                var custdata = response[i];
+                                DataOfModel += '<tr>';
+                                DataOfModel += '<td>' + custdata.mnCustNo + '</td>';
+                                DataOfModel += '<td>' + custdata.msCustFName + '</td>';
+                                DataOfModel += '<td>' + custdata.msCustLName + '</td>';
+                                DataOfModel += '<td>' + custdata.msCustType + '</td>';
+                                DataOfModel += '<td>' + custdata.msCustSts + '</td>';
+                                DataOfModel += '<td>' + custdata.msCustCity + '</td>';
+                                DataOfModel += '<td>' + custdata.msCustState + '</td>';
+                                DataOfModel += '<td>' + custdata.msCustPinCode + '</td>';
+                                var CustNum = custdata.mnCustNo;
+                                DataOfModel += '<td>' + '<input type="button"  value="Select" onclick="SelectCust('+custdata.mnCustNo+');" class="btn btn-primary" />' + '</td>';
+                                DataOfModel += '</tr>';
+                                DataOfModel += '<br>';
+                            }
+                            $('#CustModalBodyTable').html(DataOfModel);
+                            $('#CustModal').modal('show');
+                        }
+                        else {
+                            $('#CustModal').modal('show');
+                            return false;
+                        }
+                    }
+                }
+            );
+        }
+
+        function SelectCust(key) {
+            var lsUrl = '@Url.Action("Select", "Customer")';
+
+            $.ajax(
+                {
+                    url: lsUrl,
+                    dataType: "json",
+                    data: {
+                        id: key,
+                    },
+                    success: function (response) {
+                       /* debugger;*/
+                        $("#mnCustNo").val(response.mnCustNo);
+                        $("#msCustMobNo").val(response.msCustMobNo);
+                        $("#msCustFName").val(response.msCustFName);
+                        $("#msCustLName").val(response.msCustLName);
+                        $("#msCustSts").val(response.msCustSts);
+                        $("#msCustType").val(response.msCustType);
+                        $("#msCustStAddr").val(response.msCustStAddr);
+                        $("#msCustArAddr").val(response.msCustArAddr);
+                        $("#msCustState").val(response.msCustState);
+                        $("#msCustCity").val(response.msCustCity);
+                        $("#msCustCountry").val(response.msCustCountry);
+                        $("#msCustPinCode").val(response.msCustPinCode);
+                        $("#msCustGSTNo").val(response.msCustGSTNo);
+                        $("#msCustEmail").val(response.msCustEmail);
+                        $("#mdCustLastVisit").val(response.mdCustLastVisit);
+                        $("#msCustRemarks").val(response.msCustRemarks);
+                      /*  debugger;*/
+                    },
+                    //error: function () {
+                    //    alert(response);
+                    //    return false;
+                   /* }*/
+                }
+            );
+        }
+
+        function ItemData() {
+            var lsUrl = '@Url.Action("FilterItem","Item")';
+            var lsItmDesc = $('#ItemInput').val();
+
+            $.ajax(
+                {
+                    url: lsUrl,
+                    dataType: "json",
+                    data: {
+                        searchItemDesc: lsItmDesc
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        var ItemModal;
+                        if (response.length > 0) {
+                            for (var i = 0; i < response.length; i++) {
+                                var ItmFetch = response[i];
+                                ItemModal += '<tr>';
+                                ItemModal += '<td>' + ItmFetch.mnItemNo + '</td>';
+                                ItemModal += '<td>' + ItmFetch.msItemDesc + '</td>';
+                                ItemModal += '<td>' + ItmFetch.mnItemPrice + '</td>';
+                                ItemModal += '<td>' + ItmFetch.msItemType + '</td>';
+                                ItemModal += '<td>' + ItmFetch.msItemSts + '</td>';
+                                ItemModal += '<td>' + ItmFetch.msItemCatg + '</td>';
+                                ItemModal += '<td>' + ItmFetch.msItemUOM + '</td>';
+                                ItemModal += '<td>' + ItmFetch.mnSGSTRate + '</td>';
+                                ItemModal += '<td>' + ItmFetch.mnCGSTRate + '</td>';
+                                ItemModal += '<td>' + ItmFetch.mnIGSTRate + '</td>';
+                                ItemModal += '<td>' + '<input type="button" value="Select" onclick="SelectItem(' + ItmFetch.mnItemNo +')" class="btn btn-secondary"/>' + '</td>';
+                                ItemModal += '</tr>';
+                                ItemModal += '<br>';
+                            }
+                            $('#ItmModalBodyTable').html(ItemModal);
+                            $('#ItemModal').modal('show');
+                        }
+                        else {
+                            $('#ItemModal').modal('show');
+                            return false;
+                        }
+                    }
+                }
+            );
+        }
+
+        function SelectItem(key) {
+            var lsUrl = '@Url.Action("SelectItem", "Item")';
+
+            $.ajax(
+                {
+                    url: lsUrl,
+                    dataType: "json",
+                    data: {
+                        id: key,
+                    },
+                    success: function (response) {
+                        $("#ItemInput").val(response.msItemDesc);
+                        $("#iObjItem_ItemNo").val(response.mnItemNo);
+                        $("#iObjItem_ItemDesc").val(response.msItemDesc);
+                        $("#iObjItem_ItemPrice").val(response.mnItemPrice);
+                        $("#iObjItem_ItemUOM").val(response.msItemUOM);
+                        $("#iObjItem_Qty").val(response.Qty);
+                        $("#iObjItem_SGSTRate").val(response.mnSGSTRate);
+                        $("#iObjItem_CGSTRate").val(response.mnCGSTRate);
+                        $("#iObjItem_IGSTRate").val(response.mnIGSTRate);
+                        $("#iObjItem_ItemCatg").val(response.msItemCatg);
+                        $("#iObjItem_ItemType").val(response.msItemType);
+                        $("#iObjItem_ItemSts").val(response.msItemSts);
+                        $("#iObjItem_ItemUPCCode").val(response.msUPCCode);
+                        $("#iObjItem_ItemHSNCode").val(response.msHSNCode);
+                        $("#iObjItem_ItemSACCode").val(response.msSACCode);
+                    }
+                }
+            );
+        }
+
+
+        function UpdateCal() {
+            var lnQty = Number($("#iObjItem_Qty").val());
+            var lnDis = Number($("#iObjItem_DiscountAmount").val());
+            var lnSGSTR = Number($("#iObjItem_SGSTRate").val());
+            var lnCGSTR = Number($("#iObjItem_CGSTRate").val());
+            var lnIGSTR = Number($("#iObjItem_IGSTRate").val());
+            var lnPrice = Number($("#iObjItem_ItemPrice").val());
+            var Divisible = "100";
+            var lnGrossAmt = (lnQty * lnPrice);
+            var lnNetA = lnGrossAmt - lnDis;
+            var lnSGSTAmt = (lnDis * (lnSGSTR) / Divisible);
+            var lnCGSTAmt = (lnDis * (lnCGSTR) / Divisible);
+            var lnIGSTAmt = (lnDis * (lnIGSTR) / Divisible);
+            var lnTax = (lnSGSTAmt + lnCGSTAmt + lnIGSTAmt);
+            var lnTotalAmt = ((lnSGSTAmt + lnCGSTAmt + lnIGSTAmt) + lnNetA);
+            if ($("#msCustState").val() == "Jharkhand") {
+                $("#iObjItem_SGSTAmount").val(String(lnSGSTAmt));
+                $("#iObjItem_CGSTAmount").val(String(lnCGSTAmt));
+            }
+            else {
+                $("#iObjItem_IGSTAmount").val(String(lnIGSTAmt));
+            }
+            $("#GrossAmount").val(String(lnGrossAmt));
+            $("#Tax").val((lnTax));
+            $("#Net").val((lnNetA));
+            $("#iObjItem_TotalAmount").val(String(lnTotalAmt));
+            $("#Add").show();
+            $("#Del").hide();
+        }
+
+
+        //function CancelLine() {
+        //    $("#Add").show();
+        //    $()
+        //}
+
+
+        $("#iObjItem_Qty").change(function () {
+            var lnQty = Number($("#iObjItem_Qty").val());
+            var lnDis = Number($("#iObjItem_DiscountAmount").val());
+            var lnSGSTR = Number($("#iObjItem_SGSTRate").val());
+            var lnCGSTR = Number($("#iObjItem_CGSTRate").val());
+            var lnIGSTR = Number($("#iObjItem_IGSTRate").val());
+            var lnPrice = Number($("#iObjItem_ItemPrice").val());
+            var Divisible = "100";
+            var lnGrossAmt = (lnQty * lnPrice);
+            var lnNetA = lnGrossAmt - lnDis;
+            var lnSGSTAmt = (lnDis * (lnSGSTR) / Divisible);
+            var lnCGSTAmt = (lnDis * (lnCGSTR) / Divisible);
+            var lnIGSTAmt = (lnDis * (lnIGSTR) / Divisible);
+            var lnTax = (lnSGSTAmt + lnCGSTAmt + lnIGSTAmt);
+            var lnTotalAmt = ((lnSGSTAmt + lnCGSTAmt + lnIGSTAmt) + lnNetA);
+            if ($("#msCustState").val() == "Jharkhand") {
+                $("#iObjItem_SGSTAmount").val(String(lnSGSTAmt));
+                $("#iObjItem_CGSTAmount").val(String(lnCGSTAmt));
+            }
+            else {
+                $("#iObjItem_IGSTAmount").val(String(lnIGSTAmt));
+            }
+            //$("#iObjItem_SGSTAmount").val(String(lnSGSTAmt));
+            //$("#iObjItem_CGSTAmount").val(String(lnCGSTAmt));
+            //$("#iObjItem_IGSTAmount").val(String(lnIGSTAmt));
+            $("#GrossAmount").val(String(lnGrossAmt));
+            $("#Tax").val((lnTax));
+            $("#Net").val((lnNetA));
+            $("#iObjItem_TotalAmount").val(String(lnTotalAmt));
+        });
+
+        function ClearOldVal() {
+            $("#iObjItem_SGSTAmount").val("");
+            $("#iObjItem_CGSTAmount").val("");
+            $("#iObjItem_IGSTAmount").val("");
+            $("#Tax").val("");
+            $("#Net").val("");
+            $("#GrossAmount").val("");
+            $("#iObjItem_TotalAmount").val("");
+            $("#ItemInput").val("");
+            $("#iObjItem_ItemNo").val("");
+            $("#iObjItem_ItemDesc").val("");
+            $("#iObjItem_ItemPrice").val("");
+            $("#iObjItem_ItemUOM").val("");
+            $("#iObjItem_SGSTRate").val("");
+            $("#iObjItem_CGSTRate").val("");
+            $("#iObjItem_IGSTRate").val("");
+            $("#iObjItem_Qty").val("");
+            $("#iObjItem_DiscountAmount").val("");
+            debugger;
+            $("#Del").hide();
+            $("#Add").val("AddLine");
+            $("#Add").show();
+        }
+
+        function GetTableValue(inRow) {
+            var lsRowNo = "#lObjInvoiceList_" + inRow.toString() + "__";
+            var lnTotalTax = 0;
+            $("#mnRow").val(inRow);
+            $("#iObjItem_ItemNo").val($(lsRowNo + "ItemNo").val());
+            $("#iObjItem_ItemDesc").val($(lsRowNo + "ItemDesc").val());
+            $("#iObjItem_ItemType").val($(lsRowNo + "ItemType").val());
+            $("#iObjItem_ItemCatg").val($(lsRowNo + "ItemCatg").val());
+            $("#iObjItem_ItemPrice").val($(lsRowNo + "ItemPrice").val());
+            $("#iObjItem_ItemUOM").val($(lsRowNo + "ItemUOM").val());
+            $("#iObjItem_Qty").val($(lsRowNo + "Qty").val());
+            $("#iObjItem_ItemSts").val($(lsRowNo + "ItemSts").val());
+
+            if ($("#msCustState").val() == "Jharkhand") {
+                $("#iObjItem_SGSTRate").val(parseFloat($(lsRowNo + "SGSTRate").val()));
+                $("#iObjItem_SGSTAmount").val(parseFloat($(lsRowNo + "SGSTAmount").val()));
+                $("#iObjItem_CGSTRate").val(parseFloat($(lsRowNo + "CGSTRate").val()));
+                $("#iObjItem_CGSTAmount").val(parseFloat($(lsRowNo + "CGSTAmount").val()));
+                lnTotalTax = parseFloat($(lsRowNo + "SGSTAmount").val());
+                lnTotalTax += parseFloat($(lsRowNo + "CGSTAmount").val());
+            }
+            else {
+                $("#iObjItem_IGSTRate").val(Number($(lsRowNo + "IGSTRate").val()));
+                $("#iObjItem_IGSTAmount").val(Number($(lsRowNo + "IGSTAmount").val()));
+                lnTotalTax = Number($(lsRowNo + "IGSTAmount").val());
+            }
+
+            if ($(lsRowNo + "DiscountAmount").val() == null)
+                $("#mInvoiceItem_DiscountAmount").val($(lsRowNo + "DiscountAmount").val());
+            else {
+                $("#iObjItem_DiscountAmount").val(Number($(lsRowNo + "DiscountAmount").val()));
+                $("#iObjItem_TotalAmount").val($(lsRowNo + "TotalAmount").val());
+            }
+            var lnPrice = Number($(lsRowNo + "ItemPrice").val());
+            var lnQty = Number($(lsRowNo + "Qty").val());
+            var lnDiscount = 0;
+
+            if ($(lsRowNo + "DiscountAmount").val() == null)
+                lnDiscount = 0;
+            else {
+                lnDiscount = Number($(lsRowNo + "DiscountAmount").val());
+                $("#Tax").val(lnTotalTax.toFixed(2));
+                $("#Net").val(((lnPrice * lnQty) - lnDiscount));
+                $("#GrossAmount").val((lnPrice * lnQty));
+            }
+            $("#Add").val("Update");
+            $("#Del").show();
+        }
+
+        $("#iObjItem_DiscountAmount").change(function () {
+            var lnQty = Number($("#iObjItem_Qty").val());
+            var lnDis = Number($("#iObjItem_DiscountAmount").val());
+            var lnSGSTR = Number($("#iObjItem_SGSTRate").val());
+            var lnCGSTR = Number($("#iObjItem_CGSTRate").val());
+            var lnIGSTR = Number($("#iObjItem_IGSTRate").val());
+            var lnPrice = Number($("#iObjItem_ItemPrice").val());
+            var Divisible = "100";
+            var lnGrossAmt = (lnQty * lnPrice);
+            var lnNetA = lnGrossAmt - lnDis;
+            var lnSGSTAmt = (lnDis * (lnSGSTR) / Divisible);
+            var lnCGSTAmt = (lnDis * (lnCGSTR) / Divisible);
+            var lnIGSTAmt = (lnDis * (lnIGSTR) / Divisible);
+            var lnTax = (lnSGSTAmt + lnCGSTAmt + lnIGSTAmt);
+            var lnTotalAmt = ((lnSGSTAmt + lnCGSTAmt + lnIGSTAmt) + lnNetA);
+            if ($("#msCustState").val() == "Jharkhand") {
+                $("#iObjItem_SGSTAmount").val(String(lnSGSTAmt));
+                $("#iObjItem_CGSTAmount").val(String(lnCGSTAmt));
+            }
+            else {
+                $("#iObjItem_IGSTAmount").val(String(lnIGSTAmt));
+            }
+            //$("#iObjItem_SGSTAmount").val(String(lnSGSTAmt));
+            //$("#iObjItem_CGSTAmount").val(String(lnCGSTAmt));
+            //$("#iObjItem_IGSTAmount").val(String(lnIGSTAmt));
+            $("#GrossAmount").val(String(lnGrossAmt));
+            $("#Tax").val((lnTax));
+            $("#Net").val((lnNetA));
+            $("#iObjItem_TotalAmount").val(String(lnTotalAmt));
+        });
+    </script>
+}
+
+
+@*// Sir - Code to input ItemData*@
+
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#MnoSearchKey").val("@ViewBag.SearchMobile");
+            $("MnoSearchKey").focus();
+        });
+</script>
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>*@
+
+
+
+@*<script type="text/javascript">
+        $(document).ready(function (){
+            $("#txtSearchName").val("@ViewBag.SearchName");
+            $("#txtSearchName").focus();
+                    if (SelectI == "Y") {
+                        var ItmNo = ItemData.mnItemNo.ToString();
+                        var ItmDesc = ItemData.msItemDesc.ToString();
+                        var ItmPrice = ItemData.mnItemPrice.ToString();
+                        var ItemUOM = ItemData.msItemUOM.ToString();
+                        var SGSTR = ItemData.mnSGSTRate.ToString();
+                        var CGSTR = ItemData.mnCGSTRate.ToString();
+                        var IGSTR = ItemData.mnIGSTRate.ToString();
+                    }
+            $("#iObjItem_ItemNo").val("@ItmNo");
+            $("#iObjItem_ItemDesc").val("@ItmDesc");
+            $("#iObjItem_ItemPrice").val("@ItmPrice");
+            $("#iObjItem_ItemUOM").val("@ItemUOM");
+            $("#iObjItem_SGSTRate").val("@SGSTR");
+            $("#iObjItem_CGSTRate").val("@CGSTR");
+            $("#iObjItem_IGSTRate").val("@IGSTR");
+                });
+    </script>*@
+
+
+@*<script type="text/javascript">
+            $(document).ready(function () {
+                $("#ItemDescSrc").val("@ViewBag.SearchDesc");
+                $("#ItemDescSrc").focus();
+            });
+    </script>*@
+
+@*<script type="text/javascript">
+                function ResetSearch() {
+                    window.location = "/Customer/Index";
+                }
+                function ApplySearch() {
+                    if ($("#MnoSearch").val() == "") {
+                        ResetSearch();
+                    }
+                    else {
+                        var lsURL = '@Url.Action("SearchCustomerName", "Customer", new { isCustMobNo = "lsMobNo" })';
+                        lsURL = lsURL.replace("lsMobNo", encodeURIComponent($("#MnoSearch").val()));
+                        lsURL = lsURL.replace(/&amp;/g, "&");
+                        window.location = lsURL;
+                    }
+                }
+    </script>*@
+
+
+<style>
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+    .tabContent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    #theButton {
+        border: solid 1px green;
+        height: 22px;
+        line-height: 22px;
+        vertical-align: middle
+    }
+
+
+    /* Modal Content/Box */
+    #mBody {
+        background-color: #fefefe;
+        margin: 2% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 100%; /* Could be more or less, depending on screen size */
+        height: 100%;
+    }
+</style>
+
+<script>
+
+</script>
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+    <h4>Invoice</h4>
+    <hr />
+    <p>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    </p>
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InvoiceSNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => Innvce, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })*@
+                @Html.EditorFor(model => model.InvoiceSNo, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.InvoiceSNo, "", new { @class = "text-danger col-md-1" })
+                @Html.LabelFor(model => model.mdInvoiceDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.mdInvoiceDate, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.mdInvoiceDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.mnInvoiceSNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.mnInvoiceSNo, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.mnInvoiceSNo, "", new { @class = "text-danger col-md-1" })
+                @Html.LabelFor(model => model.msInvoiceSts, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.msInvoiceSts, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.msInvoiceSts, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="tab">
+            <button type="button" class="tablinks" onclick="OpenInvoice(event,'Main')">Main</button>
+            <button type="button" class="tablinks" onclick="OpenInvoice(event,'Vehicle')">Vehicle</button>
+            <button type="button" class="tablinks" onclick="OpenInvoice(event,'Bill')">Bill</button>
+        </div>
+
+        <div id="Main" class="tabContent">
+            <div class="form-group col-md-6">
+                <table>
+                    <tr>
+                        <td class="col-md-3">
+                            <label class="col-md-3" for="MnoSearch">Mobile No</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="MnoSearch" id="MnoSearch">
+                        </td>
+                        <td>
+                            <button type="button" onclick="CustData()" style="height:35px;width:50px;" class="form-control" name="buttonSearchCustomer">
+                                <i class="glyphicon glyphicon-search" style="position:center;"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    @*<p class="w3-xxlarge">
+                            <button type="submit" onclick="ApplySearch();" style="height:35px;width:35px;" value="Search" class="col-md-1">
+                                <i class="glyphicon glyphicon-search" style="position:center;"></i>
+                            </button>
+                        </p>*@
+                    @Html.LabelFor(model => model.msCustMobNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msCustMobNo, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustMobNo, "", new { @class = "text-danger " })
+                    @Html.LabelFor(model => model.mnCustNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnCustNo, new { htmlAttributes = new { @class = "form-control col-md-5", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnCustNo, "", new { @class = "text-danger " })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msCustFName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msCustFName, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustFName, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msCustLName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msCustLName, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustLName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msCustSts, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msCustSts, new { @class = "form-control col-md-2", @width = 40, @readonly = "true" })
+                    @Html.ValidationMessageFor(model => model.msCustSts, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msCustType, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msCustType, new { @class = "form-control col-md-5", @width = 40, @readonly = "true" })
+                    @Html.ValidationMessageFor(model => model.msCustType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msCustStAddr, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msCustStAddr, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustStAddr, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msCustArAddr, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msCustArAddr, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustArAddr, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msCustState, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msCustState, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustState, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msCustCity, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msCustCity, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustCity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msCustCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msCustCountry, new { htmlAttributes = new { @class = "form-control col-md-3", @value = "INDIA", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustCountry, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msCustPinCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msCustPinCode, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustPinCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msCustGSTNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msCustGSTNo, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustGSTNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msCustEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msCustEmail, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustEmail, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mdCustlLastVisit, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mdCustlLastVisit, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mdCustlLastVisit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msCustRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msCustRemarks, new { htmlAttributes = new { @class = "form-control", @style = "width:800px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msCustRemarks, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.msInvoiceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msInvoiceRemarks, new { htmlAttributes = new { @class = "form-control col-md-4", @style = "width:300px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msInvoiceRemarks, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.mnInvoiceSNo, htmlAttributes: new { @class = "control-label col-md-1" })
+                    @Html.EditorFor(model => model.mnInvoiceSNo, new { htmlAttributes = new { @class = "form-control col-md-2", @readonly = "true", @style = "width:150px;" } })
+                    @Html.ValidationMessageFor(model => model.mnInvoiceSNo, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.mdInvoiceDate, htmlAttributes: new { @class = "control-label col-md-1" })
+                    @Html.EditorFor(model => model.mdInvoiceDate, new { htmlAttributes = new { @class = "form-control col-md-2", @style = "width:200px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mdInvoiceDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div id="Vehicle" class="tabContent">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.msVehicleRegNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msVehicleRegNo, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msVehicleRegNo, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msVehicleModel, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msVehicleModel, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msVehicleModel, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.msChassisNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msChassisNo, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msChassisNo, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msEngineNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msEngineNo, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msEngineNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnMileage, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnMileage, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnMileage, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msServiceType, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msServiceType, new { @class = "form-control col-md-4", @width = 40 })
+                    @Html.ValidationMessageFor(model => model.msServiceType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.msServiceAssoName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msServiceAssoName, new { htmlAttributes = new { @class = "form-control col-md-3" } })
+                    @Html.ValidationMessageFor(model => model.msServiceAssoName, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.msServiceAssoMobNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.msServiceAssoMobNo, new { htmlAttributes = new { @class = "form-control col-md-4" } })
+                    @Html.ValidationMessageFor(model => model.msServiceAssoMobNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+        <div id="Bill" class="tabContent">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnPartsTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnPartsTotal, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnPartsTotal, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mnLabourTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnLabourTotal, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnLabourTotal, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnPartsCGSTTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnPartsCGSTTotal, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnPartsCGSTTotal, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mnLabourCGSTTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnLabourCGSTTotal, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnLabourCGSTTotal, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnPartsSGSTTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnPartsSGSTTotal, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnPartsSGSTTotal, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mnLabourSGSTTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnLabourSGSTTotal, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnLabourSGSTTotal, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnPartsIGSTTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnPartsIGSTTotal, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnPartsIGSTTotal, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mnLabourIGSTTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnLabourIGSTTotal, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnLabourIGSTTotal, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnTotalSGST, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnTotalSGST, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnTotalSGST, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mnTotalCGST, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnTotalCGST, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnTotalCGST, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnTotalIGST, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnTotalIGST, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnTotalIGST, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mnTotalTax, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnTotalTax, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnTotalTax, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnTotalAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnTotalAmount, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnTotalAmount, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mnGrandTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnGrandTotal, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnGrandTotal, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.mnDiscountAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnDiscountAmount, new { htmlAttributes = new { @class = "form-control col-md-3", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnDiscountAmount, "", new { @class = "text-danger col-md-1" })
+                    @Html.LabelFor(model => model.mnInvoiceTotal, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.mnInvoiceTotal, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.mnInvoiceTotal, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.msInvoiceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msInvoiceRemarks, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.msInvoiceRemarks, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+
+        <div class="form-horizontal">
+            <div class="form-group col-md-6">
+                <table>
+                    <tr>
+                        <td class="col-md-3">
+                            <label class="col-md-3" for="ItemInput">Item Desc</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="ItemInput" id="ItemInput">
+                        </td>
+                        <td>
+                            <button type="button" onclick="ItemData()" style="height:35px;width:50px;" class="form-control" name="buttonSearchItem">
+                                <i class="glyphicon glyphicon-search" style="position:center;"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.iObjItem.ItemNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.iObjItem.ItemNo, new { htmlAttributes = new { @class = "form-control col-md-2", @style = "width:200px;", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.iObjItem.ItemNo, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.iObjItem.ItemDesc, htmlAttributes: new { @class = "control-label col-md-1" })
+                @Html.EditorFor(model => model.iObjItem.ItemDesc, new { htmlAttributes = new { @class = "form-control col-md-3", @style = "width:200px;", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.iObjItem.ItemDesc, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.iObjItem.ItemPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.iObjItem.ItemPrice, new { htmlAttributes = new { @class = "form-control col-md-1", @style = "width:200px;", @readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.iObjItem.ItemPrice, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.iObjItem.ItemUOM, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.iObjItem.ItemUOM, new { htmlAttributes = new { @class = "form-control col-md-2", @style = "width:200px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.ItemUOM, "", new { @class = "text-danger", @readonly = "true" })
+                    @Html.LabelFor(model => model.iObjItem.Qty, htmlAttributes: new { @class = "control-label col-md-1" })
+                    @Html.EditorFor(model => model.iObjItem.Qty, new { htmlAttributes = new { @class = "form-control col-md-3", @style = "width:140px;" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.Qty, "", new { @class = "text-danger" })
+                    @Html.Label("Gross Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.Editor("GrossAmount", new { htmlAttributes = new { @class = "form-control col-md-2", @readonly = "readonly" } })
+                    @*<label for="GrossAmount" class="control-label col-md-3">Gross Amount</label>*@
+                    @*<input type="text" id="GrossAmount" class="form-control col-md-1" style="width:200px;" readonly="readonly" />*@
+                    @Html.HiddenFor(model => model.iObjItem.ItemCatg, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.iObjItem.ItemType, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.mnRow, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.iObjItem.ItemSts, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.iObjItem.HSNCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.iObjItem.SACCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.iObjItem.UPCCode, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+            @*</div>*@
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.iObjItem.SGSTRate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.iObjItem.SGSTRate, new { htmlAttributes = new { @class = "form-control col-md-2", @style = "width:200px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.SGSTRate, "", new { @class = "text-danger", @readonly = "true" })
+                    @Html.LabelFor(model => model.iObjItem.CGSTRate, htmlAttributes: new { @class = "control-label col-md-1" })
+                    @Html.EditorFor(model => model.iObjItem.CGSTRate, new { htmlAttributes = new { @class = "form-control col-md-3", @style = "width:140px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.CGSTRate, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.iObjItem.IGSTRate, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.EditorFor(model => model.iObjItem.IGSTRate, new { htmlAttributes = new { @class = "form-control col-md-1", @style = "width:200px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.IGSTRate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.iObjItem.SGSTAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.iObjItem.SGSTAmount, new { htmlAttributes = new { @class = "form-control col-md-2", @style = "width:200px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.SGSTAmount, "", new { @class = "text-danger", @readonly = "true" })
+                    @Html.LabelFor(model => model.iObjItem.CGSTAmount, htmlAttributes: new { @class = "control-label col-md-1" })
+                    @Html.EditorFor(model => model.iObjItem.CGSTAmount, new { htmlAttributes = new { @class = "form-control col-md-3", @style = "width:140px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.CGSTAmount, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.iObjItem.IGSTAmount, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.EditorFor(model => model.iObjItem.IGSTAmount, new { htmlAttributes = new { @class = "form-control col-md-1", @style = "width:200px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.IGSTAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.iObjItem.DiscountAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.EditorFor(model => model.iObjItem.DiscountAmount, new { htmlAttributes = new { @class = "form-control col-md-2", @style = "width:200px;" } })
+                        @Html.ValidationMessageFor(model => model.iObjItem.DiscountAmount, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="Net" class="control-label col-md-2">Net</label>
+                        <input type="text" class="form-control col-md-1" id="Net" style="width:100px;" readonly="readonly" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="Tax" class="control-label col-md-2">Tax</label>
+                        <input type="text" class="form-control col-md-1" id="Tax" style="width:100px;" readonly="readonly" />
+                    </div>
+                    @Html.LabelFor(model => model.iObjItem.TotalAmount, htmlAttributes: new { @class = "control-label col-md-1" })
+                    @Html.EditorFor(model => model.iObjItem.TotalAmount, new { htmlAttributes = new { @class = "form-control col-md-1", @style = "width:140px;", @readonly = "true" } })
+                    @Html.ValidationMessageFor(model => model.iObjItem.TotalAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12 ">
+                    <br>
+                    <p class="col-md-12">
+                        <input type="submit" id="Add" name="isAction" value="AddLine" oclick="UpdateCal();" class="btn btn-primary" />
+                        <input type="button" id="Can" name="isAction" value="Cancel" onclick="ClearOldVal();" class="btn btn-primary" />
+                        <input type="submit" id="Del" name="isAction" value="Delete" class="btn btn-primary" />
+                    </p>
+                </div>
+            </div>
+
+            <hr>
+            <div class="form-group">
+                <table style="border-block:2px solid green">
+                    <tr>
+                        <th>
+                            S.No &nbsp;&nbsp;
+                        </th>
+                        <th>
+                            Item No &nbsp;&nbsp;
+                        </th>
+                        <th>
+                            Item Desc &nbsp;&nbsp;
+                        </th>
+                        <th>
+                            Type &nbsp;&nbsp;&nbsp;&nbsp;
+                        </th>
+                        <th>
+                            Catg &nbsp;&nbsp;&nbsp;&nbsp;
+                        </th>
+                        <th>
+                            Status &nbsp;&nbsp;&nbsp;&nbsp;
+                        </th>
+                        <th>
+                            Price &nbsp;&nbsp;
+                        </th>
+                        <th>
+                            UOM &nbsp;&nbsp;
+                        </th>
+                        <th>
+                            Qty &nbsp;&nbsp;
+                        </th>
+                        @if ("Jharkhand" == Model.msCustState)
+                        {
+                            <th>SGST Rate &nbsp;&nbsp;</th>
+                            <th>SGST Amt &nbsp;&nbsp;</th>
+                            <th>CGST Rate &nbsp;&nbsp;</th>
+                            <th>CGST Amt &nbsp;&nbsp;</th>
+                        }
+                        else
+                        {
+                            <th>IGST Rate&nbsp;&nbsp;</th>
+                            <th>IGST Amt&nbsp;&nbsp;</th>
+
+                        }
+                        @*<th>Total Price&nbsp;&nbsp;</th>*@
+                        <th>Discount&nbsp;&nbsp;</th>
+                        @*<th>Net Price&nbsp;&nbsp;</th>
+                            <th>Total Tax&nbsp;&nbsp;</th>*@
+                        <th>Total Amount&nbsp;&nbsp;</th>
+                    </tr>
+                    @{int lnCnt = 1;
+                        int lnRow = 0;}
+                    @foreach (var item in Model.lObjInvoiceList.ToList())
+                    {
+                        <tr>
+                            <td>
+                                @lnCnt
+                                @{Total = lnCnt; lnCnt++;}
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].InvoiceItemSNo)
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].InvoiceSNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].ItemNo, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].ItemNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].ItemDesc, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].ItemDesc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].ItemType, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].ItemType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].ItemCatg, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].ItemCatg)
+                                @*@Html.DisplayFor(model => model.lObjInvoiceList[lnRow].ItemSts)*@
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].ItemSts, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].ItemSts)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].ItemPrice, new { htmlAttributes = new { @class = "form-control float-md-right" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].ItemPrice)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].ItemUOM, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].ItemUOM)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].Qty, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].Qty)
+                            </td>
+                            @if ("Jharkhand" == Model.msCustState)
+                            {
+                                <td>
+                                    @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].SGSTRate, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].SGSTRate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].SGSTAmount, new { htmlAttributes = new { @class = "form-control float-md-right" } })
+                                    @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].SGSTAmount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].CGSTRate, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].CGSTRate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].CGSTAmount, new { htmlAttributes = new { @class = "form-control float-md-right" } })
+                                    @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].CGSTAmount)
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].IGSTRate, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].IGSTRate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].IGSTAmount, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].IGSTAmount)
+                                </td>
+                            }
+                            @*<td>*@
+                            @*@Html.DisplayFor(model => model.lObjInvoiceList[lnRow].TotalAmount, new { htmlAttributes = new { @class = "form-control float-md-right" } })*@
+                            @*@Html.HiddenFor(model => model.lObjInvoiceList[lnRow].UPCCode)
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].HSNCode)
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].SACCode)*@
+                            @*</td>*@
+
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].DiscountAmount, new { htmlAttributes = new { @class = "form-control float-md-right" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].DiscountAmount)
+                            </td>
+                            @*<td>
+                                        @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].Net, new { htmlAttributes = new { @class = "form-control float-md-right" } })
+                                    </td>
+                                <td>
+                                        @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].TotalTax, new { htmlAttributes = new { @class = "form-control float-md-right" } })
+                                    </td>*@
+                            <td>
+                                @Html.DisplayFor(model => model.lObjInvoiceList[lnRow].TotalAmount, new { htmlAttributes = new { @class = "form-control float-md-right" } })
+                                @Html.HiddenFor(model => model.lObjInvoiceList[lnRow].TotalAmount)
+                            </td>
+                            <td>
+                                <input type="button" value="Select" onclick="GetTableValue(@lnRow)" class="btn btn-success" />
+                            </td>
+                        </tr>
+                        lnRow++;
+                    }
+                </table>
+            </div>
+            <hr>
+
+            <div class="modal" id="CustModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="mTitle">Customer Search Data</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="mBody">
+                            <table style="border:2px solid green;">
+                                <tr id="tableHeader">
+                                    <th>
+                                        Customer No.&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                    <th>
+                                        First Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                    <th>
+                                        Last Name&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                    <th>
+                                        Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                    <th>
+                                        Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                    <th>
+                                        City&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                    <th>
+                                        State&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                    <th>
+                                        PinCode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                </tr>
+                                <tbody id="CustModalBodyTable"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal" id="ItemModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="mTitle">Items Data</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="mBody">
+                            <table>
+                                <tr id="TableHeader">
+                                    <th>
+                                        Item No.
+                                    </th>
+                                    <th>
+                                        Item Desc
+                                    </th>
+                                    <th>
+                                        Item Price
+                                    </th>
+                                    <th>
+                                        Item Type
+                                    </th>
+                                    <th>
+                                        Item Status
+                                    </th>
+                                    <th>
+                                        Item Catg
+                                    </th>
+                                    <th>
+                                        Item UOM
+                                    </th>
+                                    <th>
+                                        SGST Rate
+                                    </th>
+                                    <th>
+                                        CGST Rate
+                                    </th>
+                                    <th>
+                                        IGST Rate
+                                    </th>
+                                </tr>
+                                <tbody id="ItmModalBodyTable"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <p class="col-md-7">
+                    </p>
+                    <p class="col-md-2">
+                    </p>
+                    <p class="col-md-1">
+                        <input type="submit" name="isAction" value="Save" class="btn btn-success" />
+                    </p>
+                    <p class="col-md-1">
+                        <input type="submit" value="Finalize" class="btn btn-success" />
+                    </p>
+                    <p class="col-md-1">
+                        <input type="button" value="Print" class="btn btn-success" />
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index");
+    @Html.ActionLink("Edit", "Edit", new { id = Model.mnInvoiceSNo }) |
+</div>

@@ -1,0 +1,156 @@
+﻿@model IEnumerable<MasterMechLib.Customer>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPageMain.cshtml";
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            $("#txtSearchMobNo").val("@ViewBag.SearchMobNo");
+            $("#txtSearchMobNo").focus();
+        });
+
+    </script>
+}
+
+<script type="text/javascript">
+
+    function ResetSearch()
+    {
+        window.location = "/Customer/Index";
+    }
+    function ApplySearch()
+    {
+        if ($("#txtSearchMobNo").val() == "")
+        {
+            ResetSearch();
+        }
+        else
+        {
+            var lsURL = '@Url.Action("SearchCustomerName", "Customer", new { isCustMobNo = "lsCustMobNo" })';
+            lsURL = lsURL.replace("lsCustMobNo", encodeURIComponent($("#txtSearchMobNo").val()));
+            lsURL = lsURL.replace(/&amp;/g, "&");
+            window.location = lsURL;
+        }
+    }
+</script>
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+</p>
+<div class="table-responsive">
+    <table class="table table-sm">
+        <tr>
+            <td class="col-md-6"></td>
+            <td class="text-right align-self-center">Mobile Number</td>
+            <td class="text-right"><input type="text" class="form-control" id="txtSearchMobNo" ;" /></td>
+            <td>
+                <input type="button" value="Search" id="btnApplyFilter" class="btn btn-primary btn-large" onclick="ApplySearch();" />
+            </td>
+            <td class="col-md-2"><input type="button" value="Reset Search" id="btnResetSearch" class="btn btn-info btn-large" onclick="ResetSearch();" /></td>
+        </tr>
+    </table>
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.mnCustNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustFName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustLName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustMobNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustSts)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustStAddr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustArAddr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustCity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustState)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustPinCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustRemarks)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.mnCustNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustFName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustLName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustMobNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustSts)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustStAddr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustArAddr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustCity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustPinCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.msCustRemarks)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.mnCustNo }) |
+                @Html.ActionLink("Details", "Details", new { id = item.mnCustNo }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.mnCustNo }) |
+                @Html.ActionLink("Select","Select", new { id = item.mnCustNo })
+            </td>
+        </tr>
+    }
+
+</table>
