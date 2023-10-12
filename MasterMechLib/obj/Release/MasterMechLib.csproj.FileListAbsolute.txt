@@ -1,0 +1,2 @@
+E:\C# TRAINING\MASTER MECH\MasterMech\MasterMechLib\obj\Release\MasterMechLib.csproj.AssemblyReference.cache
+E:\C# TRAINING\MASTER MECH\MasterMech\MasterMechLib\obj\Release\MasterMechLib.csproj.CoreCompileInputs.cache

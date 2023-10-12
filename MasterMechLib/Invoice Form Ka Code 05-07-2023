@@ -1,0 +1,1332 @@
+using MasterMechLib;
+using MasterMech;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Security.Cryptography.X509Certificates;
+using System.Data.SqlClient;
+
+namespace MasterMech
+{
+    public partial class InvoiceForm : Form
+    {
+
+        MasterMechLib.MasterMechUtil.OPMode mnMode;
+        
+
+        public enum LineItemMode //Creates DataType (User-Defined DataType)
+        {
+            Add,
+            UpdateOrDelete,
+        }
+        LineItemMode mnLinePathMod;
+
+        public InvoiceForm(MasterMechLib.MasterMechUtil.OPMode mnMode)
+        {
+            InitializeComponent();
+            this.mnMode = mnMode;
+        }
+
+      
+
+
+        int Col_ItemNo = 1;
+        int Col_Desc = 2;
+        int Col_Type = 3;
+        int Col_Price = 4;
+        int Col_UOM = 5;
+        int Col_CGSTR = 6;
+        int Col_CGSTA = 7;
+        int Col_SGSTR = 8;
+        int Col_SGSTA = 9;
+        int Col_IGSTR = 10;
+        int Col_IGSTA = 11;
+        int Col_Qty = 12;
+        int Col_DiscA = 13;
+        int Col_TtlA = 14;
+        int Col_Tax = 15;
+        int Col_NetAmt = 16;
+
+
+
+        InvoiceItem lObjInvc = new InvoiceItem();
+        Customer mObjFetchDataCst = new Customer();
+        List<Customer> oObjListCustData = new List<Customer>();
+        CustomerGrid lObjDataCust = new CustomerGrid();
+        List<ItemClass> lObjItemList = new List<ItemClass>();
+        ItemClass lObjItm = new ItemClass();
+        public int lnCount;
+
+        int mSelectedRow = 0;
+        bool mbSelectedRow = true;
+
+        List<ItemClass> lObjItmdata = new List<ItemClass>();
+
+        Invoice mObjInvcData = new Invoice();
+
+        List<int> ListErrors = new List<int>();
+        public int mnCnt = 1;
+        public bool mbSameState = false;
+
+
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void InvoiceForm_Load(object sender, EventArgs e)
+        {
+            ItemGrid();
+
+            switch (mnMode)
+            {
+                case MasterMechLib.MasterMechUtil.OPMode.New:
+                    labelMobileNoSrch.Visible = false;
+                    textBoxIncvMobS.Visible = false;
+                    buttonInvcMobS.Visible = false;
+                    buttonAdvncInvcSrch.Visible = false;
+                    labelInvcNum.Visible = false;
+                    textBoxInvNo.Visible = false;
+                    labelInvcDate.Visible = false;
+                    textBoxInvcDate.Visible = false;
+                    textBoxCustNoInnv.Enabled = true;
+                    textBoxLastVisited.Enabled = false;
+                    textBoxItemNo.Enabled = false;
+                    textBoxPrice.Enabled = false;
+                    textBoxUOM.Enabled = false;
+                    textBoxSGSTRat.Enabled = false;
+                    textBoxSgstA.Enabled = false;
+                    textBoxCGSTRte.Enabled = false;
+                    textBoxCgstAmt.Enabled = false;
+                    textBoxIGSTRat.Enabled = false;
+                    textBoxIgstAmt.Enabled = false;
+                    textBoxTaxAmt.Enabled = false;
+                    textBoxGrossAmt.Enabled = false;
+                    textBoxTotlAmt.Enabled = false;
+                    textBoxNetAmount.Enabled = false;
+                    textBoxCreate.Enabled = false;
+                    textBoxCretdBy.Enabled = false;
+                    textBoxModfy.Enabled = false;
+                    textBoxModfyBy.Enabled = false;
+                    buttonDelInvc.Visible = true;
+                    labelMobCst.Visible = true;
+                    textBoxMobNum.Visible = true;
+                    buttonSrchMobNo.Visible = true;
+                    buttonAdvncSrch.Visible = true;
+                    labelCustNo.Visible = true;
+                    textBoxCustNoInnv.Visible = true;
+                    textBoxCustNoInnv.Enabled = false;
+                    textBoxContryInvc.Enabled = false;
+                    buttonDelInvc.Visible = false;
+                    buttonCacel.Visible = false;
+                    textBoxContryInvc.Text = "INDIA";
+                    break;
+                case MasterMechLib.MasterMechUtil.OPMode.Open:
+                    labelMobileNoSrch.Visible = true;
+                    textBoxIncvMobS.Visible = true;
+                    buttonInvcMobS.Visible = true;
+                    buttonAdvncInvcSrch.Visible = true;
+                    labelInvcNum.Visible = true;
+                    textBoxInvNo.Visible = true;
+                    labelInvcDate.Visible = true;
+                    textBoxInvcDate.Visible = true;
+                    textBoxCustNoInnv.Enabled = false;
+                    textBoxLastVisited.Enabled = false;
+                    textBoxItemNo.Enabled = false;
+                    textBoxPrice.Enabled = false;
+                    textBoxUOM.Enabled = false;
+                    textBoxSGSTRat.Enabled = false;
+                    textBoxSgstA.Enabled = false;
+                    textBoxCGSTRte.Enabled = false;
+                    textBoxCgstAmt.Enabled = false;
+                    textBoxIGSTRat.Enabled = false;
+                    textBoxIgstAmt.Enabled = false;
+                    textBoxTaxAmt.Enabled = false;
+                    textBoxGrossAmt.Enabled = false;
+                    textBoxTotlAmt.Enabled = false;
+                    textBoxNetAmount.Enabled = false;
+                    textBoxCreate.Enabled = false;
+                    textBoxCretdBy.Enabled = false;
+                    textBoxModfy.Enabled = false;
+                    textBoxModfyBy.Enabled = false;
+                    labelMobCst.Visible = true;
+                    textBoxMobNum.Visible = true;
+                    buttonSrchMobNo.Visible = true;
+                    buttonAdvncSrch.Visible = true;
+                    labelCustNo.Visible = true;
+                    textBoxCustNoInnv.Visible = true;
+                    buttonSaveInvc.Text = "Update";
+                    textBoxCustNoInnv.Enabled = false;
+                    textBoxContryInvc.Enabled = false;
+                    textBoxContryInvc.Text = "INDIA";
+                    buttonDelInvc.Visible = true;
+                    buttonDelInvc.Visible = false;
+                    buttonCacel.Visible = false;
+                    break;
+                case MasterMechLib.MasterMechUtil.OPMode.Delete:
+                    labelMobileNoSrch.Visible = true;
+                    textBoxIncvMobS.Visible = true;
+                    buttonInvcMobS.Visible = true;
+                    buttonAdvncInvcSrch.Visible = true;
+                    labelInvcNum.Visible = true;
+                    textBoxInvNo.Visible = true;
+                    labelInvcDate.Visible = true;
+                    textBoxInvcDate.Visible = true;
+                    textBoxCustNoInnv.Enabled = false;
+                    textBoxLastVisited.Enabled = false;
+                    textBoxItemNo.Enabled = false;
+                    textBoxPrice.Enabled = false;
+                    textBoxUOM.Enabled = false;
+                    textBoxSGSTRat.Enabled = false;
+                    textBoxSgstA.Enabled = false;
+                    textBoxCGSTRte.Enabled = false;
+                    textBoxCgstAmt.Enabled = false;
+                    textBoxIGSTRat.Enabled = false;
+                    textBoxIgstAmt.Enabled = false;
+                    textBoxTaxAmt.Enabled = false;
+                    textBoxGrossAmt.Enabled = false;
+                    textBoxTotlAmt.Enabled = false;
+                    textBoxNetAmount.Enabled = false;
+                    textBoxCreate.Enabled = false;
+                    textBoxCretdBy.Enabled = false;
+                    textBoxModfy.Enabled = false;
+                    textBoxModfyBy.Enabled = false;
+                    buttonAddInvoice.Visible = false;
+                    labelMobCst.Visible = true;
+                    textBoxMobNum.Visible = true;
+                    buttonSrchMobNo.Visible = true;
+                    buttonAdvncSrch.Visible = true;
+                    labelCustNo.Visible = true;
+                    textBoxCustNoInnv.Visible = true;
+                    buttonSaveInvc.Text = "Delete";
+                    buttonDelInvc.Visible = true;
+                    buttonDelInvc.Visible = false;
+                    buttonCacel.Visible = false;
+                    break;
+            }
+            List<string> listTypeI = new List<string>();
+            List<string> listStsI = new List<string>();
+            List<string> listServcTyp = new List<string>();
+            mObjInvcData.ComboBoxAdd(listTypeI, listStsI, listServcTyp);
+            for (int lni = 0; lni < listTypeI.Count; lni++)
+                comboBoxStsInvc.Items.Add(listTypeI[lni]);
+            for (int lnj = 0; lnj < listStsI.Count; lnj++)
+                comboBoxTypInvc.Items.Add(listStsI[lnj]);
+            for (int lnk = 0; lnk < listServcTyp.Count; lnk++)
+                comboBoxSrvceTyp.Items.Add(listServcTyp[lnk]);
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
+        private void buttonCloseInvc_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+        public void CustGridData()
+        {
+            lObjDataCust.dataGridViewCustomer.AllowUserToAddRows = false;
+            lObjDataCust.dataGridViewCustomer.ReadOnly = true;
+            lObjDataCust.dataGridViewCustomer.ColumnCount = 16;
+            lObjDataCust.dataGridViewCustomer.Columns[0].Name = "SI.No";
+            lObjDataCust.dataGridViewCustomer.Columns[1].Name = "CustNo";
+            lObjDataCust.dataGridViewCustomer.Columns[2].Name = "CustFName";
+            lObjDataCust.dataGridViewCustomer.Columns[3].Name = "CustLName";
+            lObjDataCust.dataGridViewCustomer.Columns[4].Name = "CustMobNo";
+            lObjDataCust.dataGridViewCustomer.Columns[5].Name = "CustEmail";
+            lObjDataCust.dataGridViewCustomer.Columns[6].Name = "CustSts";
+            lObjDataCust.dataGridViewCustomer.Columns[7].Name = "CustType";
+            lObjDataCust.dataGridViewCustomer.Columns[8].Name = "CustStAddr";
+            lObjDataCust.dataGridViewCustomer.Columns[9].Name = "CustArAddr";
+            lObjDataCust.dataGridViewCustomer.Columns[10].Name = "CustCity";
+            lObjDataCust.dataGridViewCustomer.Columns[11].Name = "CustState";
+            lObjDataCust.dataGridViewCustomer.Columns[12].Name = "CustPinCode";
+            lObjDataCust.dataGridViewCustomer.Columns[13].Name = "CustCountry";
+            lObjDataCust.dataGridViewCustomer.Columns[14].Name = "CustGSTNo";
+            lObjDataCust.dataGridViewCustomer.Columns[15].Name = "CustRemarks";
+
+        }
+
+
+        private void buttonSrchMobNo_Click(object sender, EventArgs e)
+        {
+            Customer lsObjFetchDa = new Customer();
+
+            oObjListCustData.Clear();
+            lObjDataCust.dataGridViewCustomer.Rows.Clear();
+
+            lsObjFetchDa.SearchCustomer(MasterMechUtil.Constr, oObjListCustData, textBoxMobNum.Text);
+
+            CustGridData();
+
+            int lcnt = 1;
+            foreach (Customer lObjDa in oObjListCustData)
+            {
+                lObjDataCust.dataGridViewCustomer.Rows.Add(lcnt++, lObjDa.mnCustNo, lObjDa.msCustFName, lObjDa.msCustLName,
+                    lObjDa.msCustMobNo, lObjDa.msCustEmail, lObjDa.msCustSts, lObjDa.msCustType, lObjDa.msCustStAddr,
+                    lObjDa.msCustArAddr, lObjDa.msCustCity, lObjDa.msCustState, lObjDa.msCustPinCode, lObjDa.msCustCountry,
+                    lObjDa.msCustGSTNo, lObjDa.msCustRemarks);
+            }
+
+
+            if (oObjListCustData.Count > 1)
+            {
+                lObjDataCust.ShowDialog();
+                int lnSelectedrow = lObjDataCust.mbSelectedRows;
+                string lsMobNum = lObjDataCust.dataGridViewCustomer.Rows[lnSelectedrow].Cells[4].Value.ToString();
+                if (lObjDataCust.mSelected)
+                    mObjFetchDataCst.LoadCustomer(MasterMechUtil.Constr, lsMobNum);
+                else
+                {
+                    MessageBox.Show("Please Select the Row!!!");
+                    return;
+                }
+                DataCust(oObjListCustData[lnSelectedrow]);
+                return;
+            }
+
+            else if (oObjListCustData.Count == 1)
+            {
+                mObjFetchDataCst.LoadCustomer(MasterMechUtil.Constr, textBoxMobNum.Text);
+                DataCust(oObjListCustData[0]);
+                return;
+            }
+            else
+                MessageBox.Show("Data Not Found!!");
+            return;
+        }
+
+        public bool ValidateInvoice()
+        {
+            bool lnValidate = false;
+            ListErrors.Clear();
+
+            if (textBoxFNam.Text.Length == 0)
+            {
+                labelCstFNmError.Visible = true;
+                lnValidate = true;
+                ListErrors.Add(0);
+            }
+
+            if (textBoxLNam.Text.Length == 0)
+            {
+                labelLNmeError.Visible = true;
+                lnValidate = true;
+                ListErrors.Add(1);
+            }
+
+            if (textBoxMobNoInvc.Text.Length == 0)
+            {
+                labelMobNoError.Visible = true;
+                lnValidate = true;
+                ListErrors.Add(2);
+            }
+
+            if (textBoxEmlIDInvc.Text.Length == 0)
+            {
+                labelEmilError.Visible = true;
+                lnValidate = true;
+                ListErrors.Add(3);
+            }
+
+            if (textBoxStatInvc.Text.Length == 0)
+            {
+                labelStateError.Visible = true;
+                lnValidate = true;
+                ListErrors.Add(4);
+            }
+
+            if (comboBoxStsInvc.Text == string.Empty)
+            {
+                labelTypeError.Visible = true;
+                lnValidate = true;
+                ListErrors.Add(5);
+            }
+
+            if (comboBoxTypInvc.Text == string.Empty)
+            {
+                labelStsError.Visible = true;
+                lnValidate = true;
+                ListErrors.Add(6);
+            }
+            return lnValidate;
+        }
+
+
+        public void DataCust(Customer mObjFetchDataCst)
+        {
+            textBoxCustNoInnv.Text = mObjFetchDataCst.mnCustNo.ToString();
+            textBoxFNam.Text = mObjFetchDataCst.msCustFName;
+            textBoxLNam.Text = mObjFetchDataCst.msCustLName;
+            textBoxMobNoInvc.Text = mObjFetchDataCst.msCustMobNo;
+            textBoxEmlIDInvc.Text = mObjFetchDataCst.msCustEmail;
+            textBoxLastVisited.Text = (mObjFetchDataCst.mdCustlLastVisit).ToString();
+            textBoxStrtAdrs.Text = mObjFetchDataCst.msCustStAddr;
+            textBoxAreaAdrs.Text = mObjFetchDataCst.msCustArAddr;
+            textBoxCityInvc.Text = mObjFetchDataCst.msCustCity;
+            textBoxStatInvc.Text = mObjFetchDataCst.msCustState;
+            textBoxPinInvc.Text = mObjFetchDataCst.msCustPinCode;
+            textBoxContryInvc.Text = mObjFetchDataCst.msCustCountry;
+            comboBoxStsInvc.Text = mObjFetchDataCst.msCustSts;
+            comboBoxTypInvc.Text = mObjFetchDataCst.msCustType;
+            textBoxGSTInvc.Text = mObjFetchDataCst.msCustGSTNo;
+            textBoxRemrkdInvc.Text = mObjFetchDataCst.msCustRemarks;
+
+            if (mObjFetchDataCst.msCustState == MasterMechUtil.mbBussiState)
+            {
+                mbSameState = true;
+            }
+
+            //Customer lObjSendData = new Customer(Convert.ToInt32(textBoxCustNoInnv.Text), textBoxFNam.Text, textBoxLNam.Text, textBoxMobNoInvc.Text, textBoxEmlIDInvc.Text,
+            //    comboBoxTypInvc.Text, comboBoxStsInvc.Text, textBoxStrtAdrs.Text, textBoxAreaAdrs.Text, textBoxCityInvc.Text, textBoxStatInvc.Text,
+            //    textBoxPinInvc.Text, textBoxContryInvc.Text, textBoxGSTInvc.Text, Convert.ToDateTime(textBoxLastVisited.Text),
+            //    textBoxRemrkdInvc.Text);
+
+            return;
+        }
+
+        private void buttonSerchDesc_Click(object sender, EventArgs e)
+        {
+          
+            textBoxSGSTRat.Text = textBoxCGSTRte.Text = textBoxIGSTRat.Text = "0";
+            textBoxSgstA.Text = textBoxCgstAmt.Text = textBoxIgstAmt.Text = "0.00";
+
+            lObjItemList.Clear();
+            lObjDataCust.dataGridViewCustomer.Rows.Clear();
+
+
+            if (textBoxDescInvc.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter a Data!!");
+                return;
+            }
+
+            lObjItm.SearchItem(textBoxDescInvc.Text, lObjItemList);
+
+            lObjDataCust.dataGridViewCustomer.AllowUserToAddRows = false;
+            lObjDataCust.dataGridViewCustomer.ReadOnly = true;
+            lObjDataCust.dataGridViewCustomer.ColumnCount = 13;
+            lObjDataCust.dataGridViewCustomer.Columns[0].Name = "SI.No";
+            lObjDataCust.dataGridViewCustomer.Columns[1].Name = "ItemNo";
+            lObjDataCust.dataGridViewCustomer.Columns[2].Name = "Desc";
+            lObjDataCust.dataGridViewCustomer.Columns[3].Name = "Type";
+            lObjDataCust.dataGridViewCustomer.Columns[4].Name = "Catg";
+            lObjDataCust.dataGridViewCustomer.Columns[5].Name = "Price";
+            lObjDataCust.dataGridViewCustomer.Columns[6].Name = "UOM";
+            lObjDataCust.dataGridViewCustomer.Columns[7].Name = "Sts";
+            lObjDataCust.dataGridViewCustomer.Columns[8].Name = "CGSTRate";
+            lObjDataCust.dataGridViewCustomer.Columns[9].Name = "SGSTRate";
+            lObjDataCust.dataGridViewCustomer.Columns[10].Name = "IGSTRate";
+            lObjDataCust.dataGridViewCustomer.Columns[11].Name = "UPCCode";
+            lObjDataCust.dataGridViewCustomer.Columns[12].Name = "HSNCode";
+
+
+            int lcnt = 1;
+            foreach (ItemClass lObjItmData in lObjItemList)
+            {
+                lObjDataCust.dataGridViewCustomer.Rows.Add(lcnt++, lObjItmData.mnItemNo, lObjItmData.msItemDesc,
+                    lObjItmData.msItemType, lObjItmData.msItemCatg, lObjItmData.mnItemPrice,
+                   lObjItmData.msItemUOM, lObjItmData.msItemSts, lObjItmData.mnCGSTRate,
+                   lObjItmData.mnSGSTRate, lObjItmData.mnIGSTRate, lObjItmData.msUPCCode,
+                   lObjItmData.msHSNCode);
+            }
+
+
+            if (lObjItemList.Count > 1)
+            {
+                lObjDataCust.ShowDialog();
+                int lnSelectedRow = lObjDataCust.mbSelectedRows;
+                string lsDesc = lObjDataCust.dataGridViewCustomer.Rows[lnSelectedRow].Cells[2].Value.ToString();
+                if (lObjDataCust.mSelected)
+                    lObjItm.LoadItem(MasterMechUtil.Constr, lsDesc);
+                else
+                {
+                    MessageBox.Show("Please Select the Row!!!");
+                    return;
+                }
+                ItemData(lObjItemList[lnSelectedRow]);
+                return;
+            }
+
+            else if (lObjItemList.Count == 1)
+            {
+                lObjItm.LoadItem(MasterMechUtil.Constr, textBoxDescInvc.Text);
+                ItemData(lObjItemList[0]);
+                return;
+            }
+            else
+                MessageBox.Show("Data Not Found!!");
+            return;
+        }
+
+
+        private void ItemData(ItemClass lObjItem)
+        {
+            textBoxItemNo.Text = lObjItem.mnItemNo.ToString();
+            textBoxDescInvc.Text = lObjItem.msItemDesc;
+            textBoxPrice.Text = lObjItem.mnItemPrice.ToString();
+            textBoxUOM.Text = lObjItem.msItemUOM;
+            textBoxSGSTRat.Text = lObjItem.mnSGSTRate.ToString();
+            textBoxCGSTRte.Text = lObjItem.mnCGSTRate.ToString();
+            textBoxIGSTRat.Text = lObjItem.mnIGSTRate.ToString();
+            textBoxItmSts.Text = lObjItem.msItemSts;
+            textBoxType.Text = lObjItem.msItemType;
+            textBoxCatg.Text = lObjItem.msItemCatg;
+            textBoxUPCCode.Text = lObjItem.msUPCCode;
+            return;
+        }
+
+
+        public void BillingData(Invoice lObjInvcBill)
+        {
+            //Invoice lObjInvcBilling = new Invoice();
+            lObjInvcBill.msVehicleRegNo = textBoxRegVehicle.Text;
+            lObjInvcBill.msVehicleModel = textBoxModelVeh.Text;
+            lObjInvcBill.msChassisNo = textBoxChassisNo.Text;
+            lObjInvcBill.msEngineNo = textBoxEngnNo.Text;
+            lObjInvcBill.mnMileage = int.Parse(textBoxMilage.Text);
+            lObjInvcBill.msServiceType = comboBoxSrvceTyp.Text;
+            lObjInvcBill.msServiceAssoName = textBoxSrvcAssote.Text;
+            lObjInvcBill.msServiceAssoMobNo = textBoxSrvAssMobNo.Text;
+            lObjInvcBill.mnPartsTotal = Convert.ToDouble(textBoxPrtsTtl.Text);
+            lObjInvcBill.mnPartsCGSTTotal = Convert.ToDouble(textBoxPrtsCgst.Text);
+            lObjInvcBill.mnPartsSGSTTotal = Convert.ToDouble(textBoxPrtsSgst.Text);
+            lObjInvcBill.mnPartsIGSTTotal = Convert.ToDouble(textBoxPrtsIGst.Text);
+            lObjInvcBill.mnLabourTotal = Convert.ToDouble(textBoxLbrTtl.Text);
+            lObjInvcBill.mnLabourCGSTTotal = Convert.ToDouble(textBoxLbrCgst.Text);
+            lObjInvcBill.mnLabourSGSTTotal = Convert.ToDouble(textBoxLbrSgst.Text);
+            lObjInvcBill.mnLabourIGSTTotal = Convert.ToDouble(textBoxLbrIgst.Text);
+            lObjInvcBill.mnTotalAmount = Convert.ToDouble(textBoxTNtAmt.Text);
+            lObjInvcBill.mnTotalCGST = Convert.ToDouble(textBoxTtlCgst.Text);
+            lObjInvcBill.mnTotalSGST = Convert.ToDouble(textBoxTtlSGST.Text);
+            lObjInvcBill.mnTotalIGST = Convert.ToDouble(textBoxTtIGST.Text);
+            lObjInvcBill.mnTotalTax = Convert.ToDouble(textBoxTtlTax.Text);
+            lObjInvcBill.mnDiscountAmount = Convert.ToDouble(textBoxTtlDsc.Text);
+            lObjInvcBill.mnGrandTotal = Convert.ToDouble(textBoxTtlGrnd.Text);
+            lObjInvcBill.msInvoiceRemarks = textBoxInvcRemrks.Text;
+
+            // lObjInvc.lObBillingList.Add(new Invoice(lObjInvcBilling));
+            return;
+        }
+
+
+        public void Vehicle(Invoice lObjFetchVehicle)
+        {
+
+            lObjFetchVehicle.msVehicleRegNo = textBoxRegVehicle.Text;
+            lObjFetchVehicle.msVehicleModel = textBoxModelVeh.Text;
+            lObjFetchVehicle.msChassisNo = textBoxChassisNo.Text;
+            lObjFetchVehicle.msEngineNo = textBoxEngnNo.Text;
+            lObjFetchVehicle.mnMileage = int.Parse(textBoxMilage.Text);
+            lObjFetchVehicle.msServiceType = comboBoxSrvceTyp.Text;
+            lObjFetchVehicle.msServiceAssoName = textBoxSrvcAssote.Text;
+            lObjFetchVehicle.msServiceAssoMobNo = textBoxSrvAssMobNo.Text;
+
+            return;
+        }
+
+
+        public void ItemGrid()
+        {
+            dataGridViewInvcData.AllowUserToAddRows = false;
+            dataGridViewInvcData.ReadOnly = true;
+            dataGridViewInvcData.ColumnCount = 17;
+            dataGridViewInvcData.Columns[0].Name = "SI.No";
+            dataGridViewInvcData.Columns[1].Name = "ItemNo";
+            dataGridViewInvcData.Columns[2].Name = "Desc";
+            dataGridViewInvcData.Columns[3].Name = "Type";
+            dataGridViewInvcData.Columns[4].Name = "Price";
+            dataGridViewInvcData.Columns[5].Name = "UOM";
+            dataGridViewInvcData.Columns[6].Name = "CGSTRate";
+            dataGridViewInvcData.Columns[7].Name = "CGSTAmt";
+            dataGridViewInvcData.Columns[8].Name = "SGSTRate";
+            dataGridViewInvcData.Columns[9].Name = "SGSTAmt";
+            dataGridViewInvcData.Columns[10].Name = "IGSTRate";
+            dataGridViewInvcData.Columns[11].Name = "IGSTAmt";
+            dataGridViewInvcData.Columns[12].Name = "Qty";
+            dataGridViewInvcData.Columns[13].Name = "DiscAmt";
+            dataGridViewInvcData.Columns[14].Name = "TotalAmt";
+            dataGridViewInvcData.Columns[15].Name = "Tax";
+            dataGridViewInvcData.Columns[16].Name = "NetAmt";
+
+        }
+
+
+        private void buttonAddInvoice_Click(object sender, EventArgs e)
+        {
+
+            if (mnLinePathMod == LineItemMode.Add)
+            {
+                InvoiceListData(lObjInvc);
+
+               // textBoxTaxAmt.Text
+                   double lnTax = Convert.ToDouble(lObjInvc.CGSTAmount) + Convert.ToDouble(lObjInvc.IGSTAmount) + Convert.ToDouble(lObjInvc.SGSTAmount);
+                   double lnGrossAmount = Convert.ToDouble(lObjInvc.Qty) * Convert.ToDouble(lObjInvc.ItemPrice);
+                   double lnNetAmount = Convert.ToDouble(lObjInvc.Qty) * Convert.ToDouble(lObjInvc.ItemPrice) - Convert.ToDouble(lObjInvc.DiscountAmount);
+                   
+                   
+                  //  textBoxNetAmount.Text = dataGridViewInvcData
+
+
+                dataGridViewInvcData.Rows.Add(mnCnt++, lObjInvc.ItemNo, lObjInvc.ItemDesc,
+                        lObjInvc.ItemType, lObjInvc.ItemPrice, lObjInvc.ItemUOM, lObjInvc.CGSTRate,
+                        lObjInvc.CGSTAmount, lObjInvc.SGSTRate, lObjInvc.SGSTAmount, lObjInvc.IGSTRate,
+                        lObjInvc.IGSTAmount, lObjInvc.Qty, lObjInvc.DiscountAmount, textBoxTotlAmt.Text,
+                        lnTax, lnNetAmount);
+                UpdateHeader();
+            }
+            else if(mnLinePathMod == LineItemMode.UpdateOrDelete)
+            {
+
+                InvoiceListData(mObjInvcData.lObjInvoiceList[mSelectedRow]);
+
+                double lnTax = Convert.ToDouble(mObjInvcData.lObjInvoiceList[mSelectedRow].CGSTAmount) + Convert.ToDouble(mObjInvcData.lObjInvoiceList[mSelectedRow].IGSTAmount) + Convert.ToDouble(mObjInvcData.lObjInvoiceList[mSelectedRow].SGSTAmount);
+                double lnGrossAmount = Convert.ToDouble(mObjInvcData.lObjInvoiceList[mSelectedRow].Qty) * Convert.ToDouble(mObjInvcData.lObjInvoiceList[mSelectedRow].ItemPrice);
+                double lnNetAmount = Convert.ToDouble(mObjInvcData.lObjInvoiceList[mSelectedRow].Qty) * Convert.ToDouble(mObjInvcData.lObjInvoiceList[mSelectedRow].ItemPrice) - Convert.ToDouble(mObjInvcData.lObjInvoiceList[mSelectedRow].DiscountAmount);
+
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_Qty].Value = mObjInvcData.lObjInvoiceList[mSelectedRow].Qty;
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_DiscA].Value = mObjInvcData.lObjInvoiceList[mSelectedRow].DiscountAmount;
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_NetAmt].Value = textBoxNetAmount.Text;
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_TtlA].Value = textBoxTotlAmt.Text;
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_SGSTA].Value = textBoxSgstA.Text;
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_IGSTA].Value = textBoxIgstAmt.Text;
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_CGSTA].Value = textBoxCgstAmt.Text;
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_Tax].Value = lnTax;
+                dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_NetAmt].Value = lnNetAmount;
+                UpdateHeader();
+            }
+           // mnLineMod = LineMode.Add;
+        }
+
+        public void UpdateHeader()
+        {
+            textBoxPrtsTtl.Text = textBoxPrtsCgst.Text = textBoxPrtsSgst.Text = textBoxPrtsIGst.Text = "0.00";
+            textBoxLbrTtl.Text = textBoxLbrCgst.Text = textBoxLbrSgst.Text = textBoxLbrIgst.Text = "0.00";
+            textBoxTNtAmt.Text = textBoxTtlCgst.Text = textBoxTtlSGST.Text = textBoxTtIGST.Text = "0.00";
+            textBoxTtlDsc.Text = textBoxTtlTax.Text = textBoxTtlGrnd.Text = "0.00";
+
+
+            for (int lnCount = 0; lnCount < dataGridViewInvcData.Rows.Count; lnCount++)
+            {
+
+                if ((mnMode == MasterMechLib.MasterMechUtil.OPMode.Delete))
+                    continue;
+
+                try
+                {
+                    if (dataGridViewInvcData.Rows[lnCount].Cells[Col_Type].Value.ToString() == "PARTS")
+                    {
+                        if (textBoxPrtsTtl.Text != "" && dataGridViewInvcData.Rows[lnCount].Cells[Col_NetAmt].Value.ToString() != "")
+                            textBoxPrtsTtl.Text = (float.Parse(textBoxPrtsTtl.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_NetAmt].Value.ToString()).ToString("F"));
+
+                        if (textBoxPrtsCgst.Text != "" && dataGridViewInvcData.Rows[lnCount].Cells[Col_CGSTA].Value.ToString() != "")
+                            textBoxPrtsCgst.Text = (float.Parse(textBoxPrtsCgst.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_CGSTA].Value.ToString())).ToString("F");
+
+                        if (textBoxPrtsSgst.Text != "" && dataGridViewInvcData.Rows[lnCount].Cells[Col_SGSTA].Value.ToString() != "")
+                            textBoxPrtsSgst.Text = (float.Parse(textBoxPrtsSgst.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_SGSTA].Value.ToString())).ToString("F");
+
+                        //if (textBoxPrtsIGst.Text != "" && dataGridViewInvcData.Rows[lnCount].Cells[Col_IGSTA].Value.ToString() != "")
+                        textBoxPrtsIGst.Text = (float.Parse(textBoxPrtsIGst.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_IGSTA].Value.ToString())).ToString("F");
+
+                    }
+
+                    if (dataGridViewInvcData.Rows[lnCount].Cells[Col_Type].Value.ToString() == "LABOUR")
+                    {
+                        //if (textBoxLbrTtl.Text != "" && dataGridViewInvcData.Rows[lnCount].Cells[Col_NetAmt].Value.ToString() != "")
+                        textBoxLbrTtl.Text = (float.Parse(textBoxLbrTtl.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_NetAmt].Value.ToString()).ToString("F"));
+
+                        //if (textBoxLbrCgst.Text != "" && dataGridViewInvcData.Rows[lnCount].Cells[Col_CGSTA].Value.ToString() != "")
+                        textBoxLbrCgst.Text = (float.Parse(textBoxLbrCgst.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_CGSTA].Value.ToString())).ToString("F");
+
+                        //if (textBoxLbrSgst.Text != "" && dataGridViewInvcData.Rows[lnCount].Cells[Col_SGSTA].Value.ToString() != "")
+                        textBoxLbrSgst.Text = (float.Parse(textBoxLbrSgst.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_SGSTA].Value.ToString())).ToString("F");
+
+                        //if (textBoxLbrIgst.Text != "" && dataGridViewInvcData.Rows[lnCount].Cells[Col_IGSTA].Value.ToString() != "")
+                        textBoxLbrIgst.Text = (float.Parse(textBoxLbrIgst.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_IGSTA].Value.ToString())).ToString("F");
+
+                    }
+                
+                textBoxTtlDsc.Text = (float.Parse(textBoxTtlDsc.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_DiscA].Value.ToString())).ToString("F");
+                textBoxTNtAmt.Text = (float.Parse(textBoxTNtAmt.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_NetAmt].Value.ToString())).ToString("F");
+                textBoxTtlCgst.Text = (float.Parse(textBoxTtlCgst.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_CGSTA].Value.ToString())).ToString("F");
+                textBoxTtlSGST.Text = (float.Parse(textBoxTtlSGST.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_SGSTA].Value.ToString())).ToString("F");
+                textBoxTtIGST.Text = (float.Parse(textBoxTtIGST.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_IGSTA].Value.ToString())).ToString("F");
+                textBoxTtlTax.Text = (float.Parse(textBoxTtlTax.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_Tax].Value.ToString())).ToString("F");
+                textBoxTtlGrnd.Text = (float.Parse(textBoxTtlGrnd.Text) + float.Parse(dataGridViewInvcData.Rows[lnCount].Cells[Col_TtlA].Value.ToString())).ToString("F");
+                mObjInvcData.mnInvoiceTotal = Convert.ToDouble(textBoxTtlGrnd.Text);
+                }
+                catch
+                {
+
+                }
+
+            }
+        }
+
+
+        public bool InvoiceListData(InvoiceItem lObjInvcDataItm)
+        {
+            if(mnLinePathMod != LineItemMode.UpdateOrDelete)
+            lObjItm.SearchItem(textBoxDescInvc.Text, lObjItmdata);
+
+            if (textBoxItemNo.Text == String.Empty)
+                lObjInvcDataItm.ItemNo = null;
+            else
+                lObjInvcDataItm.ItemNo = (Convert.ToInt32(textBoxItemNo.Text));
+
+                lObjInvcDataItm.ItemDesc = textBoxDescInvc.Text;
+                lObjInvcDataItm.ItemType = textBoxType.Text;
+                lObjInvcDataItm.ItemCatg = textBoxCatg.Text;
+
+            if (textBoxPrice.Text == String.Empty)
+                lObjInvcDataItm.ItemPrice = null;
+            else
+               lObjInvcDataItm.ItemPrice = Convert.ToDouble(textBoxPrice.Text);
+
+             
+                lObjInvcDataItm.ItemUOM = textBoxUOM.Text;
+                lObjInvcDataItm.ItemSts = textBoxItmSts.Text;
+
+            if (textBoxCGSTRte.Text == String.Empty)
+                lObjInvcDataItm.CGSTRate = null;
+            else
+                lObjInvcDataItm.CGSTRate = Convert.ToDouble(textBoxCGSTRte.Text);
+
+            if (textBoxCgstAmt.Text == String.Empty)
+                lObjInvcDataItm.CGSTAmount = null;
+            else
+                lObjInvcDataItm.CGSTAmount = Convert.ToDouble(textBoxCgstAmt.Text);
+
+            if (textBoxSGSTRat.Text == String.Empty)
+                lObjInvcDataItm.SGSTRate = null;
+            else
+                lObjInvcDataItm.SGSTRate = Convert.ToDouble(textBoxSGSTRat.Text);
+
+            if (textBoxSgstA.Text == String.Empty)
+                lObjInvcDataItm.SGSTAmount = null;
+            else
+                lObjInvcDataItm.SGSTAmount = Convert.ToDouble(textBoxSgstA.Text);
+
+            if (textBoxIGSTRat.Text == String.Empty)
+                lObjInvcDataItm.IGSTRate = null;
+            else
+               lObjInvcDataItm.IGSTRate = Convert.ToDouble(textBoxIGSTRat.Text);
+
+            if (textBoxIgstAmt.Text == String.Empty)
+                lObjInvcDataItm.IGSTAmount = null;
+            else
+                lObjInvcDataItm.IGSTAmount = Convert.ToDouble(textBoxIgstAmt.Text);
+
+            if (textBoxQtyInvc.Text == String.Empty)
+                lObjInvcDataItm.Qty = null;
+            else
+               lObjInvcDataItm.Qty = Convert.ToDouble(textBoxQtyInvc.Text);
+
+            if (textBoxDiscInvc.Text == String.Empty)
+                lObjInvcDataItm.DiscountAmount = null;
+            else
+               lObjInvcDataItm.DiscountAmount = Convert.ToDouble(textBoxDiscInvc.Text);
+
+            if (textBoxTotlAmt.Text == String.Empty)
+                lObjInvcDataItm.TotalAmount = null;
+            else
+                lObjInvcDataItm.TotalAmount = Convert.ToDouble(textBoxTotlAmt.Text);
+                lObjInvcDataItm.UserID = MasterMechUtil.sUserID;
+
+
+                if(mnLinePathMod != LineItemMode.UpdateOrDelete)
+                mObjInvcData.lObjInvoiceList.Add(lObjInvcDataItm);
+                return true;
+        }
+
+        private void textBoxQtyInvc_Validated(object sender, EventArgs e)
+        {
+            float lnTotalTax = 0;
+            float lnItemDiscount = 0;
+            float lnTotalPrice = 0;
+            float lnDiscountPrice = 0;
+
+
+            if (textBoxDiscInvc.Text.Length > 0)
+                lnItemDiscount = float.Parse(textBoxDiscInvc.Text);
+
+            if (textBoxQtyInvc.Text.Length > 0)
+            {
+                lnTotalPrice = float.Parse(textBoxPrice.Text) * float.Parse(textBoxQtyInvc.Text);
+                lnDiscountPrice = lnTotalPrice - lnItemDiscount;
+
+                if (textBoxSGSTRat.Text.Length > 0 && mbSameState)
+                    textBoxSgstA.Text = (lnDiscountPrice * float.Parse(textBoxSGSTRat.Text) / 100.0).ToString("F");
+
+                if (textBoxCGSTRte.Text.Length > 0 && mbSameState)
+                    textBoxCgstAmt.Text = (lnDiscountPrice * float.Parse(textBoxCGSTRte.Text) / 100.0).ToString("F");
+
+                if (textBoxIGSTRat.Text.Length > 0 && !mbSameState)
+                    textBoxIgstAmt.Text = (lnDiscountPrice * float.Parse(textBoxIGSTRat.Text) / 100.0).ToString("F");
+
+                textBoxNetAmount.Text = lnDiscountPrice.ToString("F");
+                textBoxGrossAmt.Text = lnTotalPrice.ToString("F");
+
+
+                if (textBoxSgstA.Text.Length > 0 && mbSameState)
+                    lnTotalTax = float.Parse(textBoxSgstA.Text);
+
+                if (textBoxCgstAmt.Text.Length > 0 && mbSameState)
+                    lnTotalTax += float.Parse(textBoxCgstAmt.Text);
+
+                if (textBoxIgstAmt.Text.Length > 0 && !mbSameState)
+                    lnTotalTax += float.Parse(textBoxIgstAmt.Text);
+
+
+                textBoxTaxAmt.Text = lnTotalTax.ToString("F");
+
+                textBoxTotlAmt.Text = (float.Parse(textBoxTaxAmt.Text) + lnTotalTax).ToString("F");
+
+            }
+        }
+
+
+        private void buttonSaveInvc_Click(object sender, EventArgs e)
+        {
+            if (!ValidateInvoice() == true)
+            {
+                if (ListErrors.Count > 0)
+                {
+                    int lnErrorCount = ListErrors.Min();
+                    switch (lnErrorCount)
+                    {
+                        case 0: textBoxFNam.Focus(); break;
+                        case 1: textBoxLNam.Focus(); break;
+                        case 2: textBoxMobNoInvc.Focus(); break;
+                        case 3: textBoxEmlIDInvc.Focus(); break;
+                        case 4: textBoxStatInvc.Focus(); break;
+                        case 5: comboBoxStsInvc.Focus(); break;
+                        case 6: comboBoxTypInvc.Focus(); break;
+                    }
+                    ListErrors.Clear();
+                    return;
+                }
+            }
+            switch (mnMode)
+            {
+                case MasterMechLib.MasterMechUtil.OPMode.New:
+                    Value();
+                    BillingData(mObjInvcData);
+                    if (mObjInvcData.Save() == true)
+                        MessageBox.Show("Data Saved Successful!!");
+                    else
+                        MessageBox.Show("Data Not Saved!!");
+                    break;
+                case MasterMechLib.MasterMechUtil.OPMode.Open:
+                    Value();
+                    BillingData(mObjInvcData);
+                    if (mObjInvcData.Save() == true)
+                        MessageBox.Show("Data Saved Successful!!");
+                    else
+                        MessageBox.Show("Data Not Updated!!");
+                    break;
+            }
+        }
+
+
+        private void buttonAdvncSrch_Click(object sender, EventArgs e)
+        {
+            List<Customer> lObjListCustomer = new List<Customer>();
+
+            Advance_Search lObjAdvSrch = new Advance_Search(lObjListCustomer);
+            lObjAdvSrch.ShowDialog();
+
+            CustomerGrid lObjDataGrid = new CustomerGrid();
+
+            Customer lobjCstClss = new Customer();
+
+
+
+            lObjDataGrid.dataGridViewCustomer.AllowUserToAddRows = false;
+            lObjDataGrid.dataGridViewCustomer.ReadOnly = true;
+            lObjDataGrid.dataGridViewCustomer.ColumnCount = 16;
+            lObjDataGrid.dataGridViewCustomer.Columns[0].Name = "SI.No";
+            lObjDataGrid.dataGridViewCustomer.Columns[1].Name = "CustNo";
+            lObjDataGrid.dataGridViewCustomer.Columns[2].Name = "CustFName";
+            lObjDataGrid.dataGridViewCustomer.Columns[3].Name = "CustLName";
+            lObjDataGrid.dataGridViewCustomer.Columns[4].Name = "CustMobNo";
+            lObjDataGrid.dataGridViewCustomer.Columns[5].Name = "CustEmail";
+            lObjDataGrid.dataGridViewCustomer.Columns[6].Name = "CustSts";
+            lObjDataGrid.dataGridViewCustomer.Columns[7].Name = "CustType";
+            lObjDataGrid.dataGridViewCustomer.Columns[8].Name = "CustStAddr";
+            lObjDataGrid.dataGridViewCustomer.Columns[9].Name = "CustArAddr";
+            lObjDataGrid.dataGridViewCustomer.Columns[10].Name = "CustCity";
+            lObjDataGrid.dataGridViewCustomer.Columns[11].Name = "CustState";
+            lObjDataGrid.dataGridViewCustomer.Columns[12].Name = "CustPinCode";
+            lObjDataGrid.dataGridViewCustomer.Columns[13].Name = "CustCountry";
+            lObjDataGrid.dataGridViewCustomer.Columns[14].Name = "CustGSTNo";
+            lObjDataGrid.dataGridViewCustomer.Columns[15].Name = "CustRemarks";
+            // lObjDataGrid.dataGridViewCustomer.Columns[16].Name = ""
+
+
+            int lnCnt = 1;
+            foreach (Customer lObjAddD in lObjListCustomer)
+            {
+                lObjDataGrid.dataGridViewCustomer.Rows.Add(lnCnt++, lObjAddD.mnCustNo, lObjAddD.msCustFName,
+                    lObjAddD.msCustLName, lObjAddD.msCustMobNo, lObjAddD.msCustEmail,
+                    lObjAddD.msCustSts, lObjAddD.msCustType, lObjAddD.msCustStAddr, lObjAddD.msCustArAddr,
+                     lObjAddD.msCustCity, lObjAddD.msCustState,
+                     lObjAddD.msCustPinCode, lObjAddD.msCustCountry, lObjAddD.msCustGSTNo,
+                        lObjAddD.msCustRemarks
+                             );
+            }
+
+
+            if (lObjListCustomer.Count > 1)
+            {
+                lObjDataGrid.ShowDialog();
+                int lnSelectedRow = lObjDataGrid.mbSelectedRows;
+                string lnMobNo = (lObjDataGrid.dataGridViewCustomer.Rows[lnSelectedRow].Cells[4].Value.ToString());
+                if (lObjDataGrid.mSelected)
+                    mObjFetchDataCst.LoadCustomer(MasterMechLib.MasterMechUtil.Constr, lnMobNo);
+                else         //if (lObjGridView.mbSelected == false)
+                {
+                    MessageBox.Show("Row was Not Choosen!!");
+                    return;
+                }
+                // FetchData([lnSelectedRow]);
+                ValueIn(lObjListCustomer[lnSelectedRow]);
+                return;
+            }
+
+
+            if (lObjListCustomer.Count == 1)
+            {
+                ValueIn(lObjListCustomer[0]);
+                return;
+            }
+
+            else
+            {
+                MessageBox.Show("Not Found !!");
+                //lObjDataGrid.ShowDialog();
+                return;
+            }
+
+        }
+
+
+      /*  public void DummyValue(Invoice mObjInvcData)
+        {
+            mObjInvcData.mObjCustData.mnCustNo = Convert.ToInt32(textBoxCustNoInnv.Text);
+            mObjInvcData.mObjCustData.msCustFName = textBoxFNam.Text;
+            mObjInvcData.mObjCustData.msCustLName = textBoxLNam.Text;
+            mObjInvcData.mObjCustData.msCustMobNo = textBoxMobNoInvc.Text;
+            mObjInvcData.mObjCustData.msCustEmail = textBoxEmlIDInvc.Text;
+            mObjInvcData.mObjCustData.msCustType = comboBoxTypInvc.Text;
+            mObjInvcData.mObjCustData.msCustSts = comboBoxStsInvc.Text;
+            mObjInvcData.mObjCustData.msCustArAddr = textBoxAreaAdrs.Text;
+            mObjInvcData.mObjCustData.msCustStAddr = textBoxStrtAdrs.Text;
+            mObjInvcData.mObjCustData.msCustCity = textBoxCityInvc.Text;
+            mObjInvcData.mObjCustData.msCustState = textBoxStatInvc.Text;
+            mObjInvcData.mObjCustData.msCustPinCode = textBoxPinInvc.Text;
+            mObjInvcData.mObjCustData.msCustCountry = textBoxContryInvc.Text;
+            mObjInvcData.mObjCustData.msCustGSTNo = textBoxGSTInvc.Text;
+            mObjInvcData.mObjCustData.mdCustlLastVisit = (DateTime.Now);
+            mObjInvcData.mObjCustData.msCustRemarks = textBoxRemrkdInvc.Text;
+            return;
+        }*/
+
+
+
+        public void Value()
+        {
+            if(textBoxCustNoInnv.Text == String.Empty)
+            {
+                mObjInvcData.mObjCustData.mnCustNo = null;
+            }
+            else
+            {
+                mObjInvcData.mObjCustData.mnCustNo = Convert.ToInt32(textBoxCustNoInnv.Text);
+            }
+            mObjInvcData.mObjCustData.msCustFName = textBoxFNam.Text;
+            mObjInvcData.mObjCustData.msCustLName = textBoxLNam.Text;
+            mObjInvcData.mObjCustData.msCustMobNo = textBoxMobNoInvc.Text;
+            mObjInvcData.mObjCustData.msCustEmail = textBoxEmlIDInvc.Text;
+            mObjInvcData.mObjCustData.msCustType = comboBoxTypInvc.Text;
+            mObjInvcData.mObjCustData.msCustSts = comboBoxStsInvc.Text;
+            mObjInvcData.mObjCustData.msCustArAddr = textBoxAreaAdrs.Text;
+            mObjInvcData.mObjCustData.msCustStAddr = textBoxStrtAdrs.Text;
+            mObjInvcData.mObjCustData.msCustCity = textBoxCityInvc.Text;
+            mObjInvcData.mObjCustData.msCustState = textBoxStatInvc.Text;
+            mObjInvcData.mObjCustData.msCustPinCode = textBoxPinInvc.Text;
+            mObjInvcData.mObjCustData.msCustCountry = textBoxContryInvc.Text;
+            mObjInvcData.mObjCustData.msCustGSTNo = textBoxGSTInvc.Text;
+            mObjInvcData.mObjCustData.mdCustlLastVisit = (DateTime.Now);
+            mObjInvcData.mObjCustData.msCustRemarks = textBoxRemrkdInvc.Text;
+
+            return;
+
+        }
+
+        public void ValueIn(Customer mObjCustData)
+        {
+            textBoxFNam.Text = mObjCustData.msCustFName;
+            textBoxLNam.Text = mObjCustData.msCustLName;
+            textBoxMobNoInvc.Text = mObjCustData.msCustMobNo;
+            textBoxEmlIDInvc.Text = mObjCustData.msCustEmail;
+            comboBoxTypInvc.Text = mObjCustData.msCustType;
+            comboBoxStsInvc.Text = mObjCustData.msCustSts;
+            textBoxAreaAdrs.Text = mObjCustData.msCustArAddr;
+            textBoxStrtAdrs.Text = mObjCustData.msCustStAddr;
+            textBoxCityInvc.Text = mObjCustData.msCustCity;
+            textBoxStatInvc.Text = mObjCustData.msCustState;
+            textBoxPinInvc.Text = mObjCustData.msCustPinCode;
+            textBoxContryInvc.Text = mObjCustData.msCustCountry;
+            textBoxGSTInvc.Text = mObjCustData.msCustGSTNo;
+            textBoxLastVisited.Text = mObjCustData.mdCustlLastVisit.ToString();
+            textBoxRemrkdInvc.Text = mObjCustData.msCustRemarks;
+            return;
+        }
+
+
+        private void textBoxMobNoInvc_Validating(object sender, CancelEventArgs e)
+        {
+            bool lbValidMobNO = Regex.IsMatch(this.textBoxMobNoInvc.Text, @"^(\d{10})$", RegexOptions.IgnoreCase);
+            if (lbValidMobNO == false)
+            {
+                textBoxMobNoInvc.ForeColor = Color.Red;
+                textBoxMobNoInvc.Font = new Font(textBoxMobNoInvc.Font, FontStyle.Bold);
+                labelMobNoError.Text = "Not in Correct Format";
+                labelMobNoError.Visible = true;
+            }
+        }
+
+        private void buttonSearchVehcl_Click(object sender, EventArgs e)
+        {
+
+
+        }
+
+        private void buttonDelInvc_Click(object sender, EventArgs e)
+        {
+            
+
+            if (mbSelectedRow == true)
+            {
+                dataGridViewInvcData.Rows.RemoveAt(mSelectedRow);
+                mObjInvcData.lObjInvoiceList.RemoveAt(mSelectedRow);
+                UpdateLine(mSelectedRow);
+                ClearLineItems();
+            }
+            else
+            {
+                MessageBox.Show("Please Select The Line Items Row to Delete!!");
+            }
+        }
+
+        public void UpdateLine(int inSelectedRowNo)
+        {
+            for (int lni = inSelectedRowNo; lni < dataGridViewInvcData.Rows.Count; lni++)
+            {
+                dataGridViewInvcData.Rows[lni].Cells[0].Value = lni + 1;
+            }
+        }
+
+
+        public void InvoiceGrid(CustomerGrid lObjInvcGrid)
+        {
+            //= new CustomerGrid();
+
+
+            lObjInvcGrid.dataGridViewCustomer.AllowUserToAddRows = false;
+            lObjInvcGrid.dataGridViewCustomer.ColumnCount = 48;
+            lObjInvcGrid.dataGridViewCustomer.Columns[0].Name = "SI.No";
+            lObjInvcGrid.dataGridViewCustomer.Columns[1].Name = "InvoiceSNo";
+            lObjInvcGrid.dataGridViewCustomer.Columns[2].Name = "InvoiceDate";
+            lObjInvcGrid.dataGridViewCustomer.Columns[3].Name = "CustNo";
+            lObjInvcGrid.dataGridViewCustomer.Columns[4].Name = "CustFName";
+            lObjInvcGrid.dataGridViewCustomer.Columns[5].Name = "CustLName";
+            lObjInvcGrid.dataGridViewCustomer.Columns[6].Name = "CustMobNo";
+            lObjInvcGrid.dataGridViewCustomer.Columns[7].Name = "CustEmail";
+            lObjInvcGrid.dataGridViewCustomer.Columns[8].Name = "CustSts";
+            lObjInvcGrid.dataGridViewCustomer.Columns[9].Name = "CustType";
+            lObjInvcGrid.dataGridViewCustomer.Columns[10].Name = "CustStAddr";
+            lObjInvcGrid.dataGridViewCustomer.Columns[11].Name = "CustArAddr";
+            lObjInvcGrid.dataGridViewCustomer.Columns[12].Name = "CustCity";
+            lObjInvcGrid.dataGridViewCustomer.Columns[13].Name = "CustState";
+            lObjInvcGrid.dataGridViewCustomer.Columns[14].Name = "CustPinCode";
+            lObjInvcGrid.dataGridViewCustomer.Columns[15].Name = "CustCountry";
+            lObjInvcGrid.dataGridViewCustomer.Columns[16].Name = "CustGSTNo";
+            lObjInvcGrid.dataGridViewCustomer.Columns[17].Name = "CustlLastVisit";
+            lObjInvcGrid.dataGridViewCustomer.Columns[18].Name = "CustRemarks";
+            lObjInvcGrid.dataGridViewCustomer.Columns[19].Name = "VehicleRegNo";
+            lObjInvcGrid.dataGridViewCustomer.Columns[20].Name = "VehicleModel";
+            lObjInvcGrid.dataGridViewCustomer.Columns[21].Name = "ChassisNo";
+            lObjInvcGrid.dataGridViewCustomer.Columns[22].Name = "EngineNo";
+            lObjInvcGrid.dataGridViewCustomer.Columns[23].Name = "Mileage";
+            lObjInvcGrid.dataGridViewCustomer.Columns[24].Name = "ServiceType";
+            lObjInvcGrid.dataGridViewCustomer.Columns[25].Name = "ServiceAssoName";
+            lObjInvcGrid.dataGridViewCustomer.Columns[26].Name = "ServiceAssoMobNo";
+            lObjInvcGrid.dataGridViewCustomer.Columns[27].Name = "PartsTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[28].Name = "LabourTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[29].Name = "PartsCGSTTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[30].Name = "LabourCGSTTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[31].Name = "PartsSGSTTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[32].Name = "LabourSGSTTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[33].Name = "PartsIGSTTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[34].Name = "LabourIGSTTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[35].Name = "TotalSGST";
+            lObjInvcGrid.dataGridViewCustomer.Columns[36].Name = "TotalCGST";
+            lObjInvcGrid.dataGridViewCustomer.Columns[37].Name = "TotalIGST";
+            lObjInvcGrid.dataGridViewCustomer.Columns[38].Name = "TotalTax";
+            lObjInvcGrid.dataGridViewCustomer.Columns[39].Name = "TotalAmount";
+            lObjInvcGrid.dataGridViewCustomer.Columns[40].Name = "GrandTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[41].Name = "DiscountAmount";
+            lObjInvcGrid.dataGridViewCustomer.Columns[42].Name = "InvoiceTotal";
+            lObjInvcGrid.dataGridViewCustomer.Columns[43].Name = "InvoiceRemarks";
+            lObjInvcGrid.dataGridViewCustomer.Columns[44].Name = "Created";
+            lObjInvcGrid.dataGridViewCustomer.Columns[45].Name = "CreatedBy";
+            lObjInvcGrid.dataGridViewCustomer.Columns[46].Name = "Modified";
+            lObjInvcGrid.dataGridViewCustomer.Columns[47].Name = "ModifiedBy";
+
+        }
+
+
+
+        private void buttonInvcMobS_Click(object sender, EventArgs e)
+        {
+            dataGridViewInvcData.Rows.Clear();
+            mObjInvcData.lObjInvoiceList.Clear();
+
+            // Invoice lObjLoadInvc = new Invoice();
+            List<Invoice> lObjIncList = new List<Invoice>();
+            CustomerGrid lObjGrid = new CustomerGrid();
+
+            mObjInvcData.SearchInvoiceMobile(MasterMechUtil.Constr, lObjIncList, textBoxIncvMobS.Text);
+
+
+            InvoiceGrid(lObjGrid);
+
+            int lnCnt = 1;
+            foreach (Invoice lObjValue in lObjIncList)
+            {
+                lObjGrid.dataGridViewCustomer.Rows.Add(lnCnt++, lObjValue.mnInvoiceSNo, lObjValue.mdInvoiceDate, lObjValue.mnCustNo, lObjValue.msCustFName,
+                    lObjValue.msCustLName, lObjValue.msCustMobNo, lObjValue.msCustEmail, lObjValue.msCustSts,
+                    lObjValue.msCustType, lObjValue.msCustStAddr, lObjValue.msCustArAddr,
+                    lObjValue.msCustCity, lObjValue.msCustState, lObjValue.msCustPinCode, lObjValue.msCustCountry, lObjValue.msCustGSTNo,
+                    lObjValue.mdCustlLastVisit, lObjValue.msCustRemarks, lObjValue.msVehicleRegNo, lObjValue.msVehicleModel, lObjValue.msChassisNo,
+                    lObjValue.msEngineNo, lObjValue.mnMileage, lObjValue.msServiceType, lObjValue.msServiceAssoName, lObjValue.msServiceAssoMobNo,
+                    lObjValue.mnPartsTotal, lObjValue.mnLabourTotal, lObjValue.mnPartsCGSTTotal, lObjValue.mnLabourCGSTTotal, lObjValue.mnPartsSGSTTotal,
+                    lObjValue.mnLabourSGSTTotal, lObjValue.mnPartsIGSTTotal, lObjValue.mnLabourIGSTTotal, lObjValue.mnTotalSGST, lObjValue.mnTotalCGST,
+                    lObjValue.mnTotalIGST, lObjValue.mnTotalTax, lObjValue.mnTotalAmount, lObjValue.mnGrandTotal, lObjValue.mnDiscountAmount,
+                    lObjValue.mnInvoiceTotal, lObjValue.msInvoiceRemarks, lObjValue.mdCreated, lObjValue.msCreatedBy, lObjValue.mdModified, lObjValue.msModifiedBy);
+             
+            }
+
+
+            if(lObjIncList.Count > 1)
+            {
+                lObjGrid.ShowDialog();
+                int lnSelectedRow = lObjGrid.mbSelectedRows;
+                string lsMobNo = lObjGrid.dataGridViewCustomer.Rows[lnSelectedRow].Cells[6].Value.ToString();
+                if (lObjGrid.mSelected)
+                    mObjInvcData.LoadInvoice(MasterMechUtil.Constr, lsMobNo);
+                else
+                {
+                    MessageBox.Show("Please Select the row!!");
+                    return;
+                }
+                foreach(InvoiceItem lObjInvc in mObjInvcData.lObjInvoiceList)
+                {
+                    dataGridViewInvcData.Rows.Add(lnCnt++, lObjInvc.ItemNo, lObjInvc.ItemDesc,
+                   lObjInvc.ItemType, lObjInvc.ItemPrice, lObjInvc.ItemUOM, lObjInvc.CGSTRate,
+                  lObjInvc.CGSTAmount, lObjInvc.SGSTRate, lObjInvc.SGSTAmount, lObjInvc.IGSTRate,
+                  lObjInvc.IGSTAmount, lObjInvc.Qty, lObjInvc.DiscountAmount, lObjInvc.TotalAmount);
+                }
+               
+                InvceDataFill(lObjIncList[lnSelectedRow]);
+                return;
+            }
+
+            if (lObjIncList.Count == 1)
+            {
+                mObjInvcData.LoadInvoice(MasterMechUtil.Constr, textBoxIncvMobS.Text);
+                foreach (InvoiceItem lObjInvc in mObjInvcData.lObjInvoiceList)
+                {
+                    dataGridViewInvcData.Rows.Add(lnCnt++,lObjInvc.ItemNo, lObjInvc.ItemDesc,
+                  lObjInvc.ItemType, lObjInvc.ItemPrice, lObjInvc.ItemUOM, lObjInvc.CGSTRate,
+                  lObjInvc.CGSTAmount, lObjInvc.SGSTRate, lObjInvc.SGSTAmount, lObjInvc.IGSTRate,
+                  lObjInvc.IGSTAmount, lObjInvc.Qty, lObjInvc.DiscountAmount, lObjInvc.TotalAmount);
+                }
+                InvceDataFill(lObjIncList[0]);
+                return;
+            }
+
+            //if (mnLineMod == LineMode.Add)
+            //{
+            //    InvoiceListData(lObjInvc);
+
+            //    dataGridViewInvcData.Rows.Add(mnCnt++, lObjInvc.ItemNo, lObjInvc.ItemDesc,
+            //            lObjInvc.ItemType, lObjInvc.ItemPrice, lObjInvc.ItemUOM, lObjInvc.CGSTRate,
+            //            lObjInvc.CGSTAmount, lObjInvc.SGSTRate, lObjInvc.SGSTAmount, lObjInvc.IGSTRate,
+            //            lObjInvc.IGSTAmount, lObjInvc.Qty, lObjInvc.DiscountAmount, textBoxTotlAmt.Text,
+            //            textBoxTaxAmt.Text, textBoxNetAmount.Text);
+            //    UpdateHeader();
+            //}
+            //else if (mnLineMod == LineMode.UpdateOrDelete)
+            //{
+
+            //    InvoiceListData(mObjInvcData.lObjInvoiceList[mSelectedRow]);
+            //    dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_Qty].Value = mObjInvcData.lObjInvoiceList[mSelectedRow].Qty;
+            //    dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_DiscA].Value = mObjInvcData.lObjInvoiceList[mSelectedRow].DiscountAmount;
+            //    dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_NetAmt].Value = textBoxNetAmount.Text;
+            //    dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_TtlA].Value = textBoxTotlAmt.Text;
+            //    dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_SGSTA].Value = textBoxSgstA.Text;
+            //    dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_IGSTA].Value = textBoxIgstAmt.Text;
+            //    dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_CGSTA].Value = textBoxCgstAmt.Text;
+            //    UpdateHeader();
+            //}
+
+
+            else
+                MessageBox.Show("No Data Found!!");
+            return;
+        }
+
+        public void InvceDataFill(Invoice lsObjFetchData)
+        {
+
+            textBoxCustNoInnv.Text = lsObjFetchData.mnCustNo.ToString();
+            textBoxFNam.Text = lsObjFetchData.msCustFName;
+            textBoxLNam.Text = lsObjFetchData.msCustLName;
+            textBoxMobNoInvc.Text = lsObjFetchData.msCustMobNo;
+            textBoxEmlIDInvc.Text = lsObjFetchData.msCustEmail;
+            textBoxLastVisited.Text = lsObjFetchData.mdCustlLastVisit.ToString();
+            textBoxStrtAdrs.Text = lsObjFetchData.msCustStAddr;
+            textBoxAreaAdrs.Text = lsObjFetchData.msCustArAddr;
+            textBoxCityInvc.Text = lsObjFetchData.msCustCity;
+            textBoxStatInvc.Text = lsObjFetchData.msCustState;
+            textBoxPinInvc.Text =  lsObjFetchData.msCustPinCode;
+            textBoxContryInvc.Text = lsObjFetchData.msCustCountry;
+            comboBoxStsInvc.Text = lsObjFetchData.msCustType;
+            comboBoxTypInvc.Text = lsObjFetchData.msCustSts;
+            textBoxGSTInvc.Text = lsObjFetchData.msCustGSTNo;
+            textBoxRemrkdInvc.Text = lsObjFetchData.msCustRemarks;
+
+
+            textBoxRegVehicle.Text = lsObjFetchData.msVehicleRegNo;
+            textBoxModelVeh.Text = lsObjFetchData.msVehicleModel;
+            textBoxChassisNo.Text = lsObjFetchData.msChassisNo;
+            textBoxEngnNo.Text = lsObjFetchData.msEngineNo;
+            textBoxMilage.Text = lsObjFetchData.mnMileage.ToString();
+            comboBoxSrvceTyp.Text = lsObjFetchData.msServiceType;
+            textBoxSrvcAssote.Text = lsObjFetchData.msServiceAssoName;
+            textBoxSrvAssMobNo.Text = lsObjFetchData.msServiceAssoMobNo;
+            textBoxPrtsTtl.Text = lsObjFetchData.mnPartsTotal.ToString();
+            textBoxPrtsCgst.Text = lsObjFetchData.mnPartsCGSTTotal.ToString();
+            textBoxPrtsSgst.Text = lsObjFetchData.mnPartsSGSTTotal.ToString();
+            textBoxPrtsIGst.Text = lsObjFetchData.mnPartsIGSTTotal.ToString();
+            textBoxLbrTtl.Text = lsObjFetchData.mnLabourTotal.ToString();
+            textBoxLbrCgst.Text = lsObjFetchData.mnLabourCGSTTotal.ToString();
+            textBoxLbrSgst.Text = lsObjFetchData.mnLabourSGSTTotal.ToString();
+            textBoxLbrIgst.Text = lsObjFetchData.mnLabourIGSTTotal.ToString();
+            textBoxTNtAmt.Text = lsObjFetchData.mnTotalAmount.ToString();
+            textBoxTtlCgst.Text = lsObjFetchData.mnTotalCGST.ToString();
+            textBoxTtlSGST.Text = lsObjFetchData.mnTotalSGST.ToString();
+            textBoxTtIGST.Text = lsObjFetchData.mnTotalIGST.ToString();
+            textBoxTtlTax.Text = lsObjFetchData.mnTotalTax.ToString();
+            textBoxTtlDsc.Text = lsObjFetchData.mnDiscountAmount.ToString();
+            textBoxTtlGrnd.Text = lsObjFetchData.mnGrandTotal.ToString();
+            textBoxInvcRemrks.Text = lsObjFetchData.msInvoiceRemarks;
+
+        }
+
+        private void dataGridViewInvcData_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewInvcData_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int lnRowNo = e.RowIndex; 
+
+            if (!mbSelectedRow)
+                return;
+            if (lnRowNo < 0)
+                return;
+            
+            textBoxItemNo.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_ItemNo].Value.ToString();
+            textBoxDescInvc.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_Desc].Value.ToString();
+            textBoxType.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_Type].Value.ToString();
+            textBoxPrice.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_Price].Value.ToString();
+            textBoxUOM.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_UOM].Value.ToString();
+            textBoxCGSTRte.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_CGSTR].Value.ToString();
+            textBoxCgstAmt.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_CGSTA].Value.ToString();
+            textBoxSGSTRat.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_SGSTR].Value.ToString();
+            textBoxSgstA.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_SGSTA].Value.ToString();
+            textBoxIGSTRat.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_IGSTR].Value.ToString();
+            textBoxIgstAmt.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_IGSTA].Value.ToString();
+            textBoxQtyInvc.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_Qty].Value.ToString();
+            textBoxDiscInvc.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_DiscA].Value.ToString();
+            textBoxTotlAmt.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_TtlA].Value.ToString();
+           // textBoxTaxAmt.Text = (dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_Tax].Value.ToString());
+          //  textBoxNetAmount.Text = dataGridViewInvcData.Rows[mSelectedRow].Cells[Col_NetAmt].Value.ToString();
+
+
+            buttonCacel.Visible = true;
+            buttonDelInvc.Visible = true;
+            buttonAddInvoice.Text = "Update";
+            mnLinePathMod = LineItemMode.UpdateOrDelete;
+            
+        
+        }
+
+        private void ClearLineItems()
+        {
+            textBoxItemNo.Clear();
+            textBoxDescInvc.Clear();
+            textBoxPrice.Clear();
+            textBoxUOM.Clear();
+            textBoxQtyInvc.Clear();
+            textBoxDiscInvc.Clear();
+            textBoxSGSTRat.Clear();
+            textBoxSgstA.Text = "0.00";
+            textBoxCGSTRte.Clear();
+            textBoxCgstAmt.Text = "0.00";
+            textBoxIGSTRat.Clear();
+            textBoxIgstAmt.Text = "0.00";
+            textBoxTaxAmt.Text = "0";
+            textBoxGrossAmt.Text = "0";
+            textBoxTotlAmt.Text = "0.00";
+        }
+
+        private void buttonCacel_Click(object sender, EventArgs e)
+        {
+            ClearLineItems();
+            buttonCacel.Visible = false;
+            buttonAddInvoice.Visible = true;
+            buttonAddInvoice.Text = "Add";
+            buttonDelInvc.Visible = false;
+        }
+    }
+}
